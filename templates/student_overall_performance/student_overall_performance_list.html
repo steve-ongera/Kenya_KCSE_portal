@@ -1,0 +1,29 @@
+<h2>Student Overall Performances</h2>
+  <table>
+    <thead>
+      <tr>
+        <th>Student</th>
+        <th>Examination Session</th>
+        <th>Total Score</th>
+        <th>Mean Grade</th>
+        <th>Total Points</th>
+        <th>Actions</th>
+      </tr>
+    </thead>
+    <tbody>
+      {% for performance in performances %}
+        <tr>
+          <td>{{ performance.student.first_name }} {{ performance.student.last_name }}</td>
+          <td>{{ performance.examination_session.year }}</td>
+          <td>{{ performance.total_score }}</td>
+          <td>{{ performance.mean_grade }}</td>
+          <td>{{ performance.total_points }}</td>
+          <td>
+            <a href="{% url 'update_student_overall_performance' performance.id %}">Edit</a>
+            <a href="{% url 'delete_student_overall_performance' performance.id %}">Delete</a>
+          </td>
+        </tr>
+      {% endfor %}
+    </tbody>
+  </table>
+  <a href="{% url 'add_student_overall_performance' %}">Add New Performance</a>

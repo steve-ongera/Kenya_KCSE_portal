@@ -1,0 +1,25 @@
+<h2>Subjects List</h2>
+<table>
+  <thead>
+    <tr>
+      <th>Subject Name</th>
+      <th>Code</th>
+      <th>Category</th>
+      <th>Actions</th>
+    </tr>
+  </thead>
+  <tbody>
+    {% for subject in subjects %}
+      <tr>
+        <td>{{ subject.name }}</td>
+        <td>{{ subject.code }}</td>
+        <td>{{ subject.get_category_display }}</td>
+        <td>
+          <a href="{% url 'update_subject' subject.id %}">Edit</a>
+          <a href="{% url 'delete_subject' subject.id %}">Delete</a>
+        </td>
+      </tr>
+    {% endfor %}
+  </tbody>
+</table>
+<a href="{% url 'add_subject' %}">Add New Subject</a>

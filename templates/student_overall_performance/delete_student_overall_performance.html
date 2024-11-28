@@ -1,0 +1,7 @@
+<h2>Delete Student Overall Performance</h2>
+  <p>Are you sure you want to delete the overall performance for {{ performance.student.first_name }} {{ performance.student.last_name }} in {{ performance.examination_session.year }}?</p>
+  <form method="post">
+    {% csrf_token %}
+    <button type="submit">Yes, Delete</button>
+  </form>
+  <a href="{% url 'student_overall_performance_list' %}">Cancel</a>

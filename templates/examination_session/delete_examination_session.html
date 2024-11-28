@@ -1,0 +1,7 @@
+<h2>Delete Examination Session</h2>
+  <p>Are you sure you want to delete the session for KCSE {{ session.year }}?</p>
+  <form method="post">
+    {% csrf_token %}
+    <button type="submit">Yes, Delete</button>
+  </form>
+  <a href="{% url 'examination_session_list' %}">Cancel</a>

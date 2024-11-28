@@ -12,9 +12,14 @@ urlpatterns = [
     path('', views.dashboard, name='dashboard'),
     
     # Student-related Routes
-    path('students/', views.student_performance_list, name='student_list'),
+    path('student/', views.student_performance_list, name='student_list2'),
     path('students/register/', views.student_registration, name='student_registration'),
     path('students/<int:student_id>/', views.student_detail, name='student_detail'),
+    path('students/', views.student_list, name='student_list'),  # List all students
+    path('students/add/', views.add_student, name='add_student'),  # Add a student
+    path('students/<int:student_id>/edit/', views.update_student, name='update_student'),  # Update student
+    path('students/<int:student_id>/delete/', views.delete_student, name='delete_student'),  # Delete student
+
     
     # Marks and Performance Routes
     path('marks/entry/', views.mark_entry, name='mark_entry'),
@@ -22,6 +27,30 @@ urlpatterns = [
     path('performance/schools/', views.school_performance, name='school_performance'),
     path('performance/subjects/', views.subject_performance, name='subject_performance'),
     path('performance/counties/', views.county_performance, name='county_performance'),
+    
+    #subject views 
+    path('subjects/', views.subject_list, name='subject_list'),  # List all subjects
+    path('subjects/add/', views.add_subject, name='add_subject'),  # Add a subject
+    path('subjects/<int:subject_id>/edit/', views.update_subject, name='update_subject'),  # Update subject
+    path('subjects/<int:subject_id>/delete/', views.delete_subject, name='delete_subject'),  # Delete subject
+     
+     #examination_session 
+    path('examination_sessions/', views.examination_session_list, name='examination_session_list'),  # List all sessions
+    path('examination_sessions/add/', views.add_examination_session, name='add_examination_session'),  # Add a session
+    path('examination_sessions/<int:session_id>/edit/', views.update_examination_session, name='update_examination_session'),  # Edit session
+    path('examination_sessions/<int:session_id>/delete/', views.delete_examination_session, name='delete_examination_session'),  # Delete session
+    
+    #marks entry
+    path('student_marks/', views.student_marks_list, name='student_marks_list'),  # List all marks
+    path('student_marks/add/', views.add_student_marks, name='add_student_marks'),  # Add new marks
+    path('student_marks/<int:marks_id>/edit/', views.update_student_marks, name='update_student_marks'),  # Edit marks
+    path('student_marks/<int:marks_id>/delete/', views.delete_student_marks, name='delete_student_marks'),  # Delete marks
+    
+    #overall performance 
+    path('student_overall_performance/', views.student_overall_performance_list, name='student_overall_performance_list'),  # List all performances
+    path('student_overall_performance/add/', views.add_student_overall_performance, name='add_student_overall_performance'),  # Add new performance
+    path('student_overall_performance/<int:performance_id>/edit/', views.update_student_overall_performance, name='update_student_overall_performance'),  # Edit performance
+    path('student_overall_performance/<int:performance_id>/delete/', views.delete_student_overall_performance, name='delete_student_overall_performance'),  # Delete performance
     
     # Export Routes
     path('export/', views.data_export, name='data_export'),

@@ -1,0 +1,9 @@
+<!-- add_student.html -->
+
+  <h2>Add Student</h2>
+  <form method="post">
+    {% csrf_token %}
+    {{ form.as_p }}
+    <button type="submit">Save Student</button>
+  </form>
+

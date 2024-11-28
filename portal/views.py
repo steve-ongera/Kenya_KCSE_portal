@@ -17,6 +17,8 @@ from .forms import (
     StudentRegistrationForm, 
     SchoolPerformanceFilterForm
 )
+from .forms import *
+
 
 @login_required
 def dashboard(request):
@@ -247,3 +249,190 @@ def county_performance(request):
     }
     
     return render(request, 'kcse_portal/county_performance.html', context)
+
+
+# Create view: Add a new student
+def add_student(request):
+    if request.method == 'POST':
+        form = StudentForm(request.POST)
+        if form.is_valid():
+            form.save()
+            return redirect('student_list')  # Redirect to the student list view
+    else:
+        form = StudentForm()
+    return render(request, 'portal/add_student.html', {'form': form})
+
+# Read view: List all students
+def student_list(request):
+    students = Student.objects.all()
+    return render(request, 'portal/student_list.html', {'students': students})
+
+# Update view: Edit a student's details
+def update_student(request, student_id):
+    student = get_object_or_404(Student, pk=student_id)
+    if request.method == 'POST':
+        form = StudentForm(request.POST, instance=student)
+        if form.is_valid():
+            form.save()
+            return redirect('student_list')
+    else:
+        form = StudentForm(instance=student)
+    return render(request, 'portal/update_student.html', {'form': form , 'student': student})
+
+# Delete view: Delete a student
+def delete_student(request, student_id):
+    student = get_object_or_404(Student, pk=student_id)
+    if request.method == 'POST':
+        student.delete()
+        return redirect('student_list')
+    return render(request, 'portal/delete_student.html', {'student': student})
+
+
+
+# Create view: Add a new subject
+def add_subject(request):
+    if request.method == 'POST':
+        form = SubjectForm(request.POST)
+        if form.is_valid():
+            form.save()
+            return redirect('subject_list')  # Redirect to the subject list view
+    else:
+        form = SubjectForm()
+    return render(request, 'subject/add_subject.html', {'form': form})
+
+# Read view: List all subjects
+def subject_list(request):
+    subjects = Subject.objects.all()
+    return render(request, 'subject/subject_list.html', {'subjects': subjects})
+
+# Update view: Edit an existing subject
+def update_subject(request, subject_id):
+    subject = get_object_or_404(Subject, pk=subject_id)
+    if request.method == 'POST':
+        form = SubjectForm(request.POST, instance=subject)
+        if form.is_valid():
+            form.save()
+            return redirect('subject_list')
+    else:
+        form = SubjectForm(instance=subject)
+    return render(request, 'subject/update_subject.html', {'form': form})
+
+# Delete view: Delete a subject
+def delete_subject(request, subject_id):
+    subject = get_object_or_404(Subject, pk=subject_id)
+    if request.method == 'POST':
+        subject.delete()
+        return redirect('subject_list')
+    return render(request, 'subject/delete_subject.html', {'subject': subject})
+
+
+# Create view: Add a new examination session
+def add_examination_session(request):
+    if request.method == 'POST':
+        form = ExaminationSessionForm(request.POST)
+        if form.is_valid():
+            form.save()
+            return redirect('examination_session_list')  # Redirect to the session list view
+    else:
+        form = ExaminationSessionForm()
+    return render(request, 'examination_session/add_examination_session.html', {'form': form})
+
+# Read view: List all examination sessions
+def examination_session_list(request):
+    sessions = ExaminationSession.objects.all()
+    return render(request, 'examination_session/examination_session_list.html', {'sessions': sessions})
+
+# Update view: Edit an existing examination session
+def update_examination_session(request, session_id):
+    session = get_object_or_404(ExaminationSession, pk=session_id)
+    if request.method == 'POST':
+        form = ExaminationSessionForm(request.POST, instance=session)
+        if form.is_valid():
+            form.save()
+            return redirect('examination_session_list')
+    else:
+        form = ExaminationSessionForm(instance=session)
+    return render(request, 'examination_session/update_examination_session.html', {'form': form})
+
+# Delete view: Delete an examination session
+def delete_examination_session(request, session_id):
+    session = get_object_or_404(ExaminationSession, pk=session_id)
+    if request.method == 'POST':
+        session.delete()
+        return redirect('examination_session_list')
+    return render(request, 'examination_session/delete_examination_session.html', {'session': session})
+
+
+# Create view: Add a new student marks record
+def add_student_marks(request):
+    if request.method == 'POST':
+        form = StudentMarksForm(request.POST)
+        if form.is_valid():
+            form.save()
+            return redirect('student_marks_list')  # Redirect to the student marks list view
+    else:
+        form = StudentMarksForm()
+    return render(request, 'student_marks/add_student_marks.html', {'form': form})
+
+# Read view: List all student marks
+def student_marks_list(request):
+    marks = StudentMarks.objects.all()
+    return render(request, 'student_marks/student_marks_list.html', {'marks': marks})
+
+# Update view: Edit an existing student marks record
+def update_student_marks(request, marks_id):
+    marks = get_object_or_404(StudentMarks, pk=marks_id)
+    if request.method == 'POST':
+        form = StudentMarksForm(request.POST, instance=marks)
+        if form.is_valid():
+            form.save()
+            return redirect('student_marks_list')
+    else:
+        form = StudentMarksForm(instance=marks)
+    return render(request, 'student_marks/update_student_marks.html', {'form': form})
+
+# Delete view: Delete a student marks record
+def delete_student_marks(request, marks_id):
+    marks = get_object_or_404(StudentMarks, pk=marks_id)
+    if request.method == 'POST':
+        marks.delete()
+        return redirect('student_marks_list')
+    return render(request, 'student_marks/delete_student_marks.html', {'marks': marks})
+
+
+
+# Create view: Add a new student overall performance record
+def add_student_overall_performance(request):
+    if request.method == 'POST':
+        form = StudentOverallPerformanceForm(request.POST)
+        if form.is_valid():
+            form.save()
+            return redirect('student_overall_performance_list')  # Redirect to the list view
+    else:
+        form = StudentOverallPerformanceForm()
+    return render(request, 'student_overall_performance/add_student_overall_performance.html', {'form': form})
+
+# Read view: List all student overall performances
+def student_overall_performance_list(request):
+    performances = StudentOverallPerformance.objects.all()
+    return render(request, 'student_overall_performance/student_overall_performance_list.html', {'performances': performances})
+
+# Update view: Edit an existing student overall performance record
+def update_student_overall_performance(request, performance_id):
+    performance = get_object_or_404(StudentOverallPerformance, pk=performance_id)
+    if request.method == 'POST':
+        form = StudentOverallPerformanceForm(request.POST, instance=performance)
+        if form.is_valid():
+            form.save()
+            return redirect('student_overall_performance_list')
+    else:
+        form = StudentOverallPerformanceForm(instance=performance)
+    return render(request, 'student_overall_performance/update_student_overall_performance.html', {'form': form})
+
+# Delete view: Delete a student overall performance record
+def delete_student_overall_performance(request, performance_id):
+    performance = get_object_or_404(StudentOverallPerformance, pk=performance_id)
+    if request.method == 'POST':
+        performance.delete()
+        return redirect('student_overall_performance_list')
+    return render(request, 'student_overall_performance/delete_student_overall_performance.html', {'performance': performance})

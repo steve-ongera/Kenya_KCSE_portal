@@ -1,0 +1,7 @@
+<h2>Edit Student Overall Performance</h2>
+  <form method="post">
+    {% csrf_token %}
+    {{ form.as_p }}
+    <button type="submit">Update Performance</button>
+  </form>
+  <a href="{% url 'student_overall_performance_list' %}">Cancel</a>

@@ -1,0 +1,7 @@
+<h2>Edit Subject</h2>
+  <form method="post">
+    {% csrf_token %}
+    {{ form.as_p }}
+    <button type="submit">Update Subject</button>
+  </form>
+  <a href="{% url 'subject_list' %}">Cancel</a>

@@ -4,7 +4,7 @@ from django.core.validators import RegexValidator, MinValueValidator, MaxValueVa
 from django.core.exceptions import ValidationError
 from .models import (
     Student, StudentMarks, Subject, 
-    School, County, ExaminationSession
+    School, County, ExaminationSession ,StudentOverallPerformance
 )
 
 class StudentRegistrationForm(forms.ModelForm):
@@ -193,3 +193,30 @@ class DataExportForm(forms.Form):
         initial='xlsx',
         help_text='Choose the file format for export'
     )
+
+class StudentForm(forms.ModelForm):
+    class Meta:
+        model = Student
+        fields = ['first_name', 'last_name', 'index_number', 'gender', 'date_of_birth', 'school']    
+
+class SubjectForm(forms.ModelForm):
+    class Meta:
+        model = Subject
+        fields = ['name', 'code', 'category']
+
+
+class ExaminationSessionForm(forms.ModelForm):
+    class Meta:
+        model = ExaminationSession
+        fields = ['year', 'start_date', 'end_date']
+
+
+class StudentMarksForm(forms.ModelForm):
+    class Meta:
+        model = StudentMarks
+        fields = ['student', 'subject', 'examination_session', 'score', 'grade']
+
+class StudentOverallPerformanceForm(forms.ModelForm):
+    class Meta:
+        model = StudentOverallPerformance
+        fields = ['student', 'examination_session', 'total_score', 'mean_grade', 'total_points']

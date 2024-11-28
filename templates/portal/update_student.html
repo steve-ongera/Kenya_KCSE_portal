@@ -1,0 +1,12 @@
+<!-- update_student.html -->
+
+  <h2>Update Student</h2>
+  <p>Are you sure you want to delete student "{{ student.first_name }} {{ student.last_name }}"?</p>
+
+  <form method="post">
+    {% csrf_token %}
+    {{ form.as_p }}
+    <button type="submit">Update Student</button>
+  </form>
+  <a href="{% url 'student_list' %}">Cancel</a>
+

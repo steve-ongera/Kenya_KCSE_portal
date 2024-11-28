@@ -1,0 +1,25 @@
+<h2>Examination Sessions</h2>
+  <table>
+    <thead>
+      <tr>
+        <th>Year</th>
+        <th>Start Date</th>
+        <th>End Date</th>
+        <th>Actions</th>
+      </tr>
+    </thead>
+    <tbody>
+      {% for session in sessions %}
+        <tr>
+          <td>{{ session.year }}</td>
+          <td>{{ session.start_date }}</td>
+          <td>{{ session.end_date }}</td>
+          <td>
+            <a href="{% url 'update_examination_session' session.id %}">Edit</a>
+            <a href="{% url 'delete_examination_session' session.id %}">Delete</a>
+          </td>
+        </tr>
+      {% endfor %}
+    </tbody>
+  </table>
+  <a href="{% url 'add_examination_session' %}">Add New Session</a>
