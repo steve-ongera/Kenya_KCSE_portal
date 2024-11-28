@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>County Performance</title>
+</head>
+<body>
+    <h1>County Performance</h1>
+
+    <h3>Performance by County</h3>
+    <table>
+        <thead>
+            <tr>
+                <th>County Name</th>
+                <th>Average Points</th>
+                <th>Total Students</th>
+                <th>Total Schools</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for county in counties %}
+                <tr>
+                    <td>{{ county.name }}</td>
+                    <td>{{ county.avg_points }}</td>
+                    <td>{{ county.total_students }}</td>
+                    <td>{{ county.total_schools }}</td>
+                </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</body>
+</html>

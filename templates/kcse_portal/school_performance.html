@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>School Performance</title>
+</head>
+<body>
+    <h1>School Performance</h1>
+
+    <h3>Performance by Schools</h3>
+    <table>
+        <thead>
+            <tr>
+                <th>School Name</th>
+                <th>Average Points</th>
+                <th>Total Students</th>
+                <th>Top Performers (A/A-)</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for school in schools %}
+                <tr>
+                    <td>{{ school.name }}</td>
+                    <td>{{ school.avg_points }}</td>
+                    <td>{{ school.total_students }}</td>
+                    <td>{{ school.top_performers }}</td>
+                </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+
+    <h3>County Performance</h3>
+    <table>
+        <thead>
+            <tr>
+                <th>County</th>
+                <th>Average Points</th>
+                <th>Total Schools</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for county in county_performance %}
+                <tr>
+                    <td>{{ county.name }}</td>
+                    <td>{{ county.avg_county_points }}</td>
+                    <td>{{ county.total_schools }}</td>
+                </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</body>
+</html>

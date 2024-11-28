@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>KCSE Dashboard</title>
+</head>
+<body>
+    <h1>Dashboard</h1>
+    
+    <div>
+        <h2>Total Students: {{ total_students }}</h2>
+        <h2>Total Schools: {{ total_schools }}</h2>
+        <h2>Total Counties: {{ total_counties }}</h2>
+    </div>
+
+    {% if latest_session %}
+        <h3>Latest Examination Session: {{ latest_session.year }}</h3>
+        <h4>National Performance</h4>
+        <p>Average Points: {{ national_performance.mean_points }}</p>
+        <p>Total Students: {{ national_performance.total_students }}</p>
+
+        <h4>Top Performing Counties</h4>
+        <ul>
+            {% for county in top_counties %}
+                <li>{{ county.name }} - Average Points: {{ county.avg_points }}</li>
+            {% endfor %}
+        </ul>
+    {% else %}
+        <p>No examination session data available.</p>
+    {% endif %}
+</body>
+</html>

@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Student Performance</title>
+</head>
+<body>
+    <h1>Student Performance</h1>
+    
+    <form method="get" action="">
+        {{ filter_form.as_p }}
+        <button type="submit">Filter</button>
+    </form>
+
+    <h3>Performance Breakdown by Grade</h3>
+    <ul>
+        {% for grade in performance_breakdown %}
+            <li>{{ grade.mean_grade }}: {{ grade.student_count }} students</li>
+        {% endfor %}
+    </ul>
+
+    <h3>List of Student Performances</h3>
+    <table>
+        <thead>
+            <tr>
+                <th>Student Name</th>
+                <th>School</th>
+                <th>Examination Session</th>
+                <th>Total Score</th>
+                <th>Mean Grade</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for performance in performances %}
+                <tr>
+                    <td>{{ performance.student.first_name }} {{ performance.student.last_name }}</td>
+                    <td>{{ performance.student.school.name }}</td>
+                    <td>{{ performance.examination_session.year }}</td>
+                    <td>{{ performance.total_score }}</td>
+                    <td>{{ performance.mean_grade }}</td>
+                </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</body>
+</html>
