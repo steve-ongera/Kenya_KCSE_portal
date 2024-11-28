@@ -6,6 +6,7 @@ from django.http import HttpResponse, JsonResponse
 from django.db.models import F
 import pandas as pd
 import io
+from collections import defaultdict
 
 from .models import (
     County, School, Student, Subject, 
@@ -374,10 +375,28 @@ def add_student_marks(request):
         form = StudentMarksForm()
     return render(request, 'student_marks/add_student_marks.html', {'form': form})
 
+
 # Read view: List all student marks
 def student_marks_list(request):
-    marks = StudentMarks.objects.all()
-    return render(request, 'student_marks/student_marks_list.html', {'marks': marks})
+    # Get all marks for the student
+    student_marks = StudentMarks.objects.all()
+    students = Student.objects.all()  # Get all students
+    subjects = Subject.objects.all()  # Get all subjects
+
+    # Create a dictionary to organize marks per student
+    marks_dict = {}
+
+    for student in students:
+        student_marks_for_student = student_marks.filter(student=student)  # Get marks for the student
+        marks_for_subjects = {}
+
+        for mark in student_marks_for_student:
+            marks_for_subjects[mark.subject.name] = mark  # Store marks with subject name as key
+
+        marks_dict[student] = marks_for_subjects
+
+    return render(request, 'student_marks/student_marks_list.html', {'students_marks': marks_dict, 'subjects': subjects})
+
 
 # Update view: Edit an existing student marks record
 def update_student_marks(request, marks_id):
@@ -388,8 +407,11 @@ def update_student_marks(request, marks_id):
             form.save()
             return redirect('student_marks_list')
     else:
+
+
         form = StudentMarksForm(instance=marks)
     return render(request, 'student_marks/update_student_marks.html', {'form': form})
+
 
 # Delete view: Delete a student marks record
 def delete_student_marks(request, marks_id):

@@ -1,29 +1,55 @@
-<h2>Student Marks</h2>
-  <table>
-    <thead>
-      <tr>
-        <th>Student</th>
-        <th>Subject</th>
-        <th>Examination Session</th>
-        <th>Score</th>
-        <th>Grade</th>
-        <th>Actions</th>
-      </tr>
-    </thead>
-    <tbody>
-      {% for marks in marks %}
-        <tr>
-          <td>{{ marks.student.first_name }} {{ marks.student.last_name }}</td>
-          <td>{{ marks.subject.name }}</td>
-          <td>{{ marks.examination_session.year }}</td>
-          <td>{{ marks.score }}</td>
-          <td>{{ marks.grade }}</td>
-          <td>
-            <a href="{% url 'update_student_marks' marks.id %}">Edit</a>
-            <a href="{% url 'delete_student_marks' marks.id %}">Delete</a>
-          </td>
-        </tr>
-      {% endfor %}
-    </tbody>
-  </table>
-  <a href="{% url 'add_student_marks' %}">Add New Marks</a>
+{% load marks_filters %}
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Student Marks</title>
+    <style>
+        table {
+            border-collapse: collapse;
+            width: 100%;
+        }
+        th, td {
+            border: 1px solid black;
+            text-align: center;
+            padding: 8px;
+        }
+        th {
+            background-color: #f2f2f2;
+        }
+    </style>
+</head>
+<body>
+    <h2>Student Marks</h2>
+    <table>
+        <thead>
+            <tr>
+                <th>Student</th>
+                {% for subject in subjects %}
+                    <th>{{ subject.name }}</th>
+                {% endfor %}
+            </tr>
+        </thead>
+        <tbody>
+            {% for student, marks in students_marks.items %}
+                <tr>
+                    <td>{{ student }}</td>
+                    {% for subject in subjects %}
+                        <td>
+                            {% with subject_marks=marks|get:subject.name %}
+                                {% if subject_marks %}
+                                    {{ subject_marks.score }} ({{ subject_marks.grade }})
+                                {% else %}
+                                    N/A
+                                {% endif %}
+                            {% endwith %}
+                        </td>
+                    {% endfor %}
+                </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</body>
+</html>
