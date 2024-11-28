@@ -51,6 +51,9 @@ urlpatterns = [
     path('student_overall_performance/add/', views.add_student_overall_performance, name='add_student_overall_performance'),  # Add new performance
     path('student_overall_performance/<int:performance_id>/edit/', views.update_student_overall_performance, name='update_student_overall_performance'),  # Edit performance
     path('student_overall_performance/<int:performance_id>/delete/', views.delete_student_overall_performance, name='delete_student_overall_performance'),  # Delete performance
+
+    #search student results
+    path('student_marks/search/', views.search_student_marks, name='search_student_marks'),
     
     # Export Routes
     path('export/', views.data_export, name='data_export'),

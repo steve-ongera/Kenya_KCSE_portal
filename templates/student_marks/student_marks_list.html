@@ -40,7 +40,9 @@
                         <td>
                             {% with subject_marks=marks|get:subject.name %}
                                 {% if subject_marks %}
+                                <a href="{% url 'update_student_marks' subject_marks.id %}">
                                     {{ subject_marks.score }} ({{ subject_marks.grade }})
+                                  </a>    
                                 {% else %}
                                     N/A
                                 {% endif %}

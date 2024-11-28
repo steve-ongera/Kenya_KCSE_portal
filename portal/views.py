@@ -458,3 +458,42 @@ def delete_student_overall_performance(request, performance_id):
         performance.delete()
         return redirect('student_overall_performance_list')
     return render(request, 'student_overall_performance/delete_student_overall_performance.html', {'performance': performance})
+
+
+#search for student result
+def search_student_marks(request):
+    student = None
+    marks = []
+    examination_session = None
+    search_name = request.GET.get('name', '').strip()
+    search_index = request.GET.get('index_number', '').strip()
+
+    if search_name and search_index:
+        try:
+            # Retrieve the student if both name and index number match
+            student = Student.objects.get(
+                index_number=search_index,
+                first_name__icontains=search_name.split()[0],  # Match first name
+                last_name__icontains=search_name.split()[-1]   # Match last name
+            )
+            # Fetch marks for the student
+            marks = StudentMarks.objects.filter(student=student).select_related('subject', 'examination_session')
+
+            # Get the examination session from the first mark
+            if marks.exists():
+                examination_session = marks.first().examination_session.year
+
+        except Student.DoesNotExist:
+            student = None
+
+    return render(
+        request,
+        'kcse_portal/search_student_marks.html',
+        {
+            'student': student,
+            'marks': marks,
+            'search_name': search_name,
+            'search_index': search_index,
+            'examination_session': examination_session,
+        }
+    )
