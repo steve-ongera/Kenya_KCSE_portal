@@ -574,19 +574,30 @@ def top_students(request):
     )
 
 
-
 def top_100_schools(request):
-    # Query to get all the schools
-    schools = School.objects.all()
+    # Get the latest examination session
+    latest_session = ExaminationSession.objects.latest('year')
 
+    # Define the threshold grades for above C+
+    high_grades = ['A', 'A-', 'B+', 'B', 'C+']
+
+    schools = School.objects.all()
     schools_data = []
 
     # Compute statistics for each school
     for school in schools:
-        mean_points, mean_grade, students_above_c_plus = compute_school_statistics(school)
+        # Count students above C+ using StudentOverallPerformance
+        students_above_c_plus = StudentOverallPerformance.objects.filter(
+            student__school=school,
+            examination_session=latest_session,
+            mean_grade__in=high_grades
+        ).count()
 
         # Get the count of students in the school
-        student_count = school.students.count()  # Assuming students are related to the school model
+        student_count = school.students.count()
+
+        # Rest of the view remains the same
+        mean_points, mean_grade, _ = compute_school_statistics(school)
 
         schools_data.append({
             'school': school,
