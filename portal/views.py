@@ -43,7 +43,7 @@ def dashboard(request):
         
         # Top 5 performing counties
         top_counties = County.objects.annotate(
-            avg_points=Avg('schools__students__overallperformance__total_points')
+            avg_points=Avg('schools__students__overall_performances__total_points')
         ).order_by('-avg_points')[:5]
         
         context = {
@@ -62,6 +62,8 @@ def dashboard(request):
         }
     
     return render(request, 'kcse_portal/dashboard.html', context)
+
+
 
 @login_required
 def student_performance_list(request):
