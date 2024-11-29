@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Subject Performance Ranking</title>
+</head>
+<body>
+    <h1>Subject Performance Ranking</h1>
+    <table>
+        <thead>
+            <tr>
+                <th>Subject</th>
+                <th>Mean Points</th>
+                <th>Mean Grade</th>
+                <th>Total Students</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for subject_data in subjects_data %}
+            <tr>
+                <td>{{ subject_data.subject.name }}</td>
+                <td>{{ subject_data.mean_points }}</td>
+                <td>{{ subject_data.mean_grade }}</td>
+                <td>{{ subject_data.total_students }}</td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</body>
+</html>

@@ -20,6 +20,7 @@ from .forms import (
 )
 from .forms import *
 from .utils import compute_school_statistics
+from django.db.models import Avg
 
 @login_required
 def dashboard(request):
@@ -640,3 +641,65 @@ def students_above_c_plus(request, school_id):
         return render(request, 'error.html', {'message': 'School not found'})
     except ExaminationSession.DoesNotExist:
         return render(request, 'error.html', {'message': 'No examination session found'})
+
+
+def rank_subjects(request):
+    # Get the latest examination session
+    latest_session = ExaminationSession.objects.latest('year')
+
+    # Fetch all subjects
+    subjects = Subject.objects.all()
+    subjects_data = []
+
+    for subject in subjects:
+        # Get marks for this subject in the latest session
+        subject_marks = StudentMarks.objects.filter(
+            subject=subject, 
+            examination_session=latest_session
+        )
+
+        # Calculate mean points for the subject
+        mean_points = subject_marks.aggregate(
+            avg_points=Avg('score')
+        )['avg_points'] or 0
+
+        # Convert mean points to grade
+        if mean_points >= 80:
+            mean_grade = 'A'
+        elif mean_points >= 75:
+            mean_grade = 'A-'
+        elif mean_points >= 70:
+            mean_grade = 'B+'
+        elif mean_points >= 65:
+            mean_grade = 'B'
+        elif mean_points >= 60:
+            mean_grade = 'B-'
+        elif mean_points >= 55:
+            mean_grade = 'C+'
+        elif mean_points >= 50:
+            mean_grade = 'C'
+        elif mean_points >= 45:
+            mean_grade = 'C-'
+        elif mean_points >= 40:
+            mean_grade = 'D+'
+        elif mean_points >= 35:
+            mean_grade = 'D'
+        elif mean_points >= 30:
+            mean_grade = 'D-'
+        else:
+            mean_grade = 'E'
+
+        # Total students who attempted the subject
+        total_students = subject_marks.count()
+
+        subjects_data.append({
+            'subject': subject,
+            'mean_points': round(mean_points, 2),
+            'mean_grade': mean_grade,
+            'total_students': total_students,
+        })
+
+    # Sort subjects by mean points in descending order
+    subjects_data = sorted(subjects_data, key=lambda x: x['mean_points'], reverse=True)
+
+    return render(request, 'ranking/subject_ranking.html', {'subjects_data': subjects_data})
