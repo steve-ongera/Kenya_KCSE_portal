@@ -463,10 +463,12 @@ def delete_student_overall_performance(request, performance_id):
 
 
 #search for student result
+
 def search_student_marks(request):
     student = None
     marks = []
     examination_session = None
+    overall_performance = None
     search_name = request.GET.get('name', '').strip()
     search_index = request.GET.get('index_number', '').strip()
 
@@ -483,7 +485,13 @@ def search_student_marks(request):
 
             # Get the examination session from the first mark
             if marks.exists():
-                examination_session = marks.first().examination_session.year
+                examination_session = marks.first().examination_session
+
+                # Fetch overall performance for the student in the session
+                overall_performance = StudentOverallPerformance.objects.filter(
+                    student=student,
+                    examination_session=examination_session
+                ).first()
 
         except Student.DoesNotExist:
             student = None
@@ -497,5 +505,70 @@ def search_student_marks(request):
             'search_name': search_name,
             'search_index': search_index,
             'examination_session': examination_session,
+            'overall_performance': overall_performance,
         }
+    )
+
+#school list views
+def all_schools_view(request):
+    # Fetch all schools from the database
+    schools = School.objects.all()
+    
+    return render(
+        request,
+        'school/all_schools.html',
+        {'schools': schools}
+    )
+
+
+def school_details_view(request, school_id):
+    # Retrieve the school based on the ID
+    school = get_object_or_404(School, id=school_id)
+    
+    # Retrieve all students in the school
+    students = Student.objects.filter(school=school)
+    
+    student_performance = []
+
+    # Get performance data for each student
+    for student in students:
+        # Retrieve the overall performance for the student
+        performance = StudentOverallPerformance.objects.filter(student=student).first()  # Assuming the most recent record is required
+
+        if performance:
+            student_performance.append({
+                'student': student,
+                'total_score': performance.total_score,
+                'total_points': performance.total_points,
+                'mean_grade': performance.mean_grade,
+                'registration_number': student.index_number,  # Assuming registration_number is the student's index number
+                'examination_session': performance.examination_session
+            })
+    
+    return render(
+        request,
+        'school/school_details.html',  # Adjust to the correct template path
+        {'school': school, 'student_performance': student_performance}
+    )
+
+
+def top_students(request):
+    # Get the top 50 students sorted by total score in descending order
+    top_students = StudentOverallPerformance.objects.all().order_by('-total_score')[:50]
+
+    # Add school information to each student's performance
+    students_with_school = []
+    for performance in top_students:
+        student = performance.student
+        school = student.school  # Assuming the Student model has a foreign key to the School model
+        students_with_school.append({
+            'student': student,
+            'performance': performance,
+            'school': school
+        })
+    
+    return render(
+        request,
+        'ranking/top_students.html',
+        {'students_with_school': students_with_school}
     )

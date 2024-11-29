@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>All Schools</title>
+    <style>
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 20px 0;
+        }
+        table, th, td {
+            border: 1px solid black;
+        }
+        th, td {
+            padding: 10px;
+            text-align: left;
+        }
+        th {
+            background-color: #f2f2f2;
+        }
+    </style>
+</head>
+<body>
+    <h1>All Schools</h1>
+
+    <table>
+        <thead>
+            <tr>
+                <th>School Name</th>
+                <th>School Code</th>
+                <th>County</th>
+                <th>Address</th>
+                <th>Details</th> <!-- Column for the Details Link -->
+            </tr>
+        </thead>
+        <tbody>
+            {% for school in schools %}
+                <tr>
+                    <td>{{ school.name }}</td>
+                    <td>{{ school.school_code }}</td>
+                    <td>{{ school.county.name }}</td>
+                    <td>{{ school.address|default:"No Address Provided" }}</td>
+                    <td><a href="{% url 'school_details' school.id %}">View Details</a></td> <!-- Link to the school details -->
+                </tr>
+            {% empty %}
+                <tr>
+                    <td colspan="5">No schools available.</td>
+                </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</body>
+</html>

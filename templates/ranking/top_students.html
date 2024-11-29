@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Top 50 Students</title>
+    <style>
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 20px 0;
+        }
+        table, th, td {
+            border: 1px solid black;
+        }
+        th, td {
+            padding: 10px;
+            text-align: left;
+        }
+        th {
+            background-color: #f2f2f2;
+        }
+    </style>
+</head>
+<body>
+    <h1>Top 50 Students</h1>
+
+    <table>
+        <thead>
+            <tr>
+                <th>Registration Number</th>
+                <th>Student Name</th>
+                <th>School</th>
+                <th>Total Score</th>
+                <th>Mean Grade</th>
+                <th>Total Points</th>
+                <th>Examination Session</th>
+                <th>Details</th> <!-- Added the details column -->
+            </tr>
+        </thead>
+        <tbody>
+            {% for student_data in students_with_school %}
+                <tr>
+                    <td>{{ student_data.student.index_number }}</td>
+                    <td>{{ student_data.student.first_name }} {{ student_data.student.last_name }}</td>
+                    <td>{{ student_data.school.name }}</td>
+                    <td>{{ student_data.performance.total_score }}</td>
+                    <td>{{ student_data.performance.mean_grade }}</td>
+                    <td>{{ student_data.performance.total_points }}</td>
+                    <td>{{ student_data.performance.examination_session.year }}</td>
+                    <td>
+                        <!-- Link to student detail page -->
+                        <a href="{% url 'student_detail' student_id=student_data.student.id %}">View Details</a>
+                    </td>
+                </tr>
+            {% empty %}
+                <tr>
+                    <td colspan="8">No students found.</td>
+                </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</body>
+</html>

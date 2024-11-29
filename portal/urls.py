@@ -54,6 +54,12 @@ urlpatterns = [
 
     #search student results
     path('student_marks/search/', views.search_student_marks, name='search_student_marks'),
+    #school list view
+    path('schools/', views.all_schools_view, name='all_schools'),
+    path('school/<int:school_id>/', views.school_details_view, name='school_details'),
+
+    #ranking
+    path('top-students/', views.top_students, name='top_students'),
     
     # Export Routes
     path('export/', views.data_export, name='data_export'),

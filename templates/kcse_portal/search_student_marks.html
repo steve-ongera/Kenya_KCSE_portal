@@ -32,6 +32,13 @@
             <li><strong>Examination Session:</strong> {{ examination_session }}</li>
         </ul>
 
+        {% if overall_performance %}
+            <h3>Overall Performance</h3>
+            <p>Total Score: {{ overall_performance.total_score }}</p>
+            <p>Mean Grade: {{ overall_performance.mean_grade }}</p>
+            <p>Total Points: {{ overall_performance.total_points }}</p>
+        {% endif %}
+
         <h3>Marks</h3>
         <table border="1">
             <thead>
