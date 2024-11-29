@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html lang="en">
+<body>
+    <h1>Students Above C+ at {{ school.name }} - {{ examination_session.year }}</h1>
+    
+    {% if students %}
+        <table>
+            <thead>
+                <tr>
+                    <th>Index Number</th>
+                    <th>Name</th>
+                    <th>Mean Grade</th>
+                    <th>Total Points</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for performance in students %}
+                    <tr>
+                        <td>{{ performance.student.index_number }}</td>
+                        <td>{{ performance.student.first_name }} {{ performance.student.last_name }}</td>
+                        <td>{{ performance.mean_grade }}</td>
+                        <td>{{ performance.total_points }}</td>
+                    </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+        <p>Total Students Above C+: {{ students.count }}</p>
+    {% else %}
+        <p>No students found above C+ grade for this school in the latest examination session.</p>
+    {% endif %}
+</body>
+</html>

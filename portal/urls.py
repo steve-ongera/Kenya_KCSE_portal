@@ -60,6 +60,8 @@ urlpatterns = [
 
     #ranking
     path('top-students/', views.top_students, name='top_students'),
+    path('top-100-schools/', views.top_100_schools, name='top_100_schools'),
+    path('students-above-c-plus/<int:school_id>/', views.students_above_c_plus, name='students_above_c_plus'),
     
     # Export Routes
     path('export/', views.data_export, name='data_export'),

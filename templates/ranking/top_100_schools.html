@@ -1,0 +1,47 @@
+
+
+<!-- top_100_schools.html -->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Top 100 Schools</title>
+</head>
+<body>
+    <h1>Top 100 Schools</h1>
+
+    {% if schools_data %}
+    <table border="1">
+        <thead>
+            <tr>
+                <th>Rank</th>
+                <th>School Name</th>
+                <th>Mean Points</th>
+                <th>Mean Grade</th>
+                <th>Students Above C+</th>
+                <th>Number of Students</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for school_data in schools_data %}
+            <tr>
+                <td>{{ forloop.counter }}</td>
+                <td>{{ school_data.school.name }}</td>
+                <td>{{ school_data.mean_points }}</td>
+                <td>{{ school_data.mean_grade }}</td>
+                <td>
+                    <a href="{% url 'students_above_c_plus' school_data.school.id %}">
+                        {{ school_data.students_above_c_plus }}
+                    </a>
+                </td>
+                <td>{{ school_data.student_count }}</td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+    {% else %}
+        <p>No data available.</p>
+    {% endif %}
+</body>
+</html>

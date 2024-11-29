@@ -19,7 +19,7 @@ from .forms import (
     SchoolPerformanceFilterForm
 )
 from .forms import *
-
+from .utils import compute_school_statistics
 
 @login_required
 def dashboard(request):
@@ -572,3 +572,60 @@ def top_students(request):
         'ranking/top_students.html',
         {'students_with_school': students_with_school}
     )
+
+
+
+def top_100_schools(request):
+    # Query to get all the schools
+    schools = School.objects.all()
+
+    schools_data = []
+
+    # Compute statistics for each school
+    for school in schools:
+        mean_points, mean_grade, students_above_c_plus = compute_school_statistics(school)
+
+        # Get the count of students in the school
+        student_count = school.students.count()  # Assuming students are related to the school model
+
+        schools_data.append({
+            'school': school,
+            'mean_points': mean_points,
+            'mean_grade': mean_grade,
+            'students_above_c_plus': students_above_c_plus,
+            'student_count': student_count,
+        })
+
+    # Sort by mean_points in descending order to get the top 100
+    schools_data = sorted(schools_data, key=lambda x: x['mean_points'], reverse=True)[:100]
+
+    return render(request, 'ranking/top_100_schools.html', {'schools_data': schools_data})
+
+
+def students_above_c_plus(request, school_id):
+    try:
+        # Get the specific school
+        school = School.objects.get(id=school_id)
+
+        # Get the latest examination session
+        latest_session = ExaminationSession.objects.latest('year')
+
+        # Define the threshold grades for above C+
+        high_grades = ['A', 'A-', 'B+', 'B', 'C+']
+
+        # Fetch students with overall performance above C+
+        students_above_c_plus = StudentOverallPerformance.objects.filter(
+            student__school=school,
+            examination_session=latest_session,
+            mean_grade__in=high_grades
+        ).select_related('student')
+
+        return render(request, 'ranking/students_above_c_plus.html', {
+            'students': students_above_c_plus,
+            'school': school,
+            'examination_session': latest_session
+        })
+    except School.DoesNotExist:
+        return render(request, 'error.html', {'message': 'School not found'})
+    except ExaminationSession.DoesNotExist:
+        return render(request, 'error.html', {'message': 'No examination session found'})
