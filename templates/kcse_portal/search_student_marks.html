@@ -1,65 +1,95 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Search Student Marks</title>
-</head>
-<body>
-    <h1>Search Student Marks</h1>
 
-    <!-- Search Form -->
-    <form method="get">
-        <label for="name">Student Name:</label>
-        <input type="text" name="name" id="name" value="{{ search_name }}" placeholder="Enter full name">
+{% extends "base/base.html" %}
+
+
+
+{% block content %}
+<div class="pagetitle">
+    <h1>Search Form</h1>
+    <nav>
+      <ol class="breadcrumb">
+        <li class="breadcrumb-item"><a href="{% url 'dashboard'%}">Home</a></li>
+        <li class="breadcrumb-item"> Search for marks </li>
+        <li class="breadcrumb-item active">Layouts</li>
+      </ol>
+    </nav>
+  </div><!-- End Page Title -->
+  <section class="section">
+    <div class="row">
+      <div class="col-lg-8">
+
+        <div class="card">
+            <div class="card-body">
+              <h5 class="card-title">Vertical Form</h5>
+
+              <!-- Vertical Form -->
+              <form method="get" class="row g-3">
+                <div class="col-12">
+                  <label for="name" class="form-label">Your Name</label>
+                  <input type="text" type="text" name="name" id="name" value="{{ search_name }}" placeholder="Enter full name" class="form-control" required >
+                </div>
+                <div class="col-12">
+                  <label for="index_number" class="form-label">Registration No</label>
+                  <input type="text" name="index_number" id="index_number" value="{{ search_index }}" class="form-control" required>
+                </div>
+           
+                <div class="text-center">
+                  <button type="submit" class="btn btn-primary">Search</button>
+                  <button type="reset" class="btn btn-secondary">Reset</button>
+                </div>
+              </form><!-- Vertical Form -->
+
+
+               <!-- Results -->
+                {% if student %}
+                <h2>Student Details</h2>
+                
+                <ul>
+                    <li><strong>First Name:</strong> {{ student.first_name }}</li>
+                    <li><strong>Last Name:</strong> {{ student.last_name }}</li>
+                    <li><strong>School:</strong> {{ student.school.name }}</li>
+                    <li><strong>Date of Birth:</strong> {{ student.date_of_birth }}</li>
+                    <li><strong>Index Number:</strong> {{ student.index_number }}</li>
+                    <li><strong>Gender:</strong> {{ student.get_gender_display }}</li>
+                    <li><strong>Examination Session:</strong> {{ examination_session }}</li>
+                </ul>
+
+                {% if overall_performance %}
+                    <h3>Overall Performance</h3>
+                    <p>Total Score: {{ overall_performance.total_score }}</p>
+                    <p>Mean Grade: {{ overall_performance.mean_grade }}</p>
+                    <p>Total Points: {{ overall_performance.total_points }}</p>
+                {% endif %}
+
+                <h3>Marks</h3>
+                <table class="table datatable">
+                    <thead>
+                        <tr>
+                            <th>Subject</th>
+                            <th>Score</th>
+                            <th>Grade</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for mark in marks %}
+                            <tr>
+                                <td>{{ mark.subject.name }}</td>
+                                <td>{{ mark.score }}</td>
+                                <td>{{ mark.grade }}</td>
+                            </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+                {% elif search_name or search_index %}
+                <p>No results found for "{{ search_name }}" with index number "{{ search_index }}".</p>
+                {% endif %}
+
+            </div>
+          </div>
+
+        </div>
+    </div>
+  </section>
+
         
-        <label for="index_number">Index Number:</label>
-        <input type="text" name="index_number" id="index_number" value="{{ search_index }}" placeholder="Enter index number">
-
-        <button type="submit">Search</button>
-    </form>
-
-    <!-- Results -->
-    {% if student %}
-        <h2>Student Details</h2>
-        <ul>
-            <li><strong>First Name:</strong> {{ student.first_name }}</li>
-            <li><strong>Last Name:</strong> {{ student.last_name }}</li>
-            <li><strong>School:</strong> {{ student.school.name }}</li>
-            <li><strong>Date of Birth:</strong> {{ student.date_of_birth }}</li>
-            <li><strong>Index Number:</strong> {{ student.index_number }}</li>
-            <li><strong>Gender:</strong> {{ student.get_gender_display }}</li>
-            <li><strong>Examination Session:</strong> {{ examination_session }}</li>
-        </ul>
-
-        {% if overall_performance %}
-            <h3>Overall Performance</h3>
-            <p>Total Score: {{ overall_performance.total_score }}</p>
-            <p>Mean Grade: {{ overall_performance.mean_grade }}</p>
-            <p>Total Points: {{ overall_performance.total_points }}</p>
-        {% endif %}
-
-        <h3>Marks</h3>
-        <table border="1">
-            <thead>
-                <tr>
-                    <th>Subject</th>
-                    <th>Score</th>
-                    <th>Grade</th>
-                </tr>
-            </thead>
-            <tbody>
-                {% for mark in marks %}
-                    <tr>
-                        <td>{{ mark.subject.name }}</td>
-                        <td>{{ mark.score }}</td>
-                        <td>{{ mark.grade }}</td>
-                    </tr>
-                {% endfor %}
-            </tbody>
-        </table>
-    {% elif search_name or search_index %}
-        <p>No results found for "{{ search_name }}" with index number "{{ search_index }}".</p>
-    {% endif %}
-</body>
-</html>
+  {% endblock %}

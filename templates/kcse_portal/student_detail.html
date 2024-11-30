@@ -1,40 +1,64 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Student Detail</title>
-</head>
-<body>
-    <h1>{{ student.first_name }} {{ student.last_name }} - Performance Details</h1>
-    
-    <h3>Overall Performance</h3>
-    <ul>
-        {% for performance in performances %}
-            <li>{{ performance.examination_session.year }}: {{ performance.mean_grade }} - Total Score: {{ performance.total_score }}</li>
-        {% endfor %}
-    </ul>
 
-    <h3>Subject Marks</h3>
-    <table>
-        <thead>
-            <tr>
-                <th>Subject</th>
-                <th>Examination Session</th>
-                <th>Score</th>
-                <th>Grade</th>
-            </tr>
-        </thead>
-        <tbody>
-            {% for mark in subject_marks %}
-                <tr>
-                    <td>{{ mark.subject.name }}</td>
-                    <td>{{ mark.examination_session.year }}</td>
-                    <td>{{ mark.score }}</td>
-                    <td>{{ mark.grade }}</td>
-                </tr>
-            {% endfor %}
-        </tbody>
-    </table>
-</body>
-</html>
+{% extends "base/base.html" %}
+
+
+
+{% block content %}
+
+<div class="pagetitle">
+    <h1>{{ student.first_name }} {{ student.last_name }} </h1>
+    <nav>
+      <ol class="breadcrumb">
+        <li class="breadcrumb-item"><a href="{% url 'dashboard'%}">Home</a></li>
+        <li class="breadcrumb-item">{{ student.first_name }} {{ student.last_name }} </li>
+        <li class="breadcrumb-item active">Data</li>
+      </ol>
+    </nav>
+  </div><!-- End Page Title -->
+
+
+
+  <section class="section">
+    <div class="row">
+      <div class="col-lg-12">
+
+        <div class="card">
+          <div class="card-body">
+            <h5 class="card-title">{{ student.first_name }} {{ student.last_name }} - Performance Details</h5>
+    
+    
+                    <h3>Overall Performance</h3>
+                    <ul>
+                        {% for performance in performances %}
+                            <li>{{ performance.examination_session.year }}: {{ performance.mean_grade }} - Total Score: {{ performance.total_score }}</li>
+                        {% endfor %}
+                    </ul>
+
+                    <table class="table datatable">
+                        <thead>
+                            <tr>
+                                <th>Subject</th>
+                                <th>Examination Session</th>
+                                <th>Score</th>
+                                <th>Grade</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for mark in subject_marks %}
+                                <tr>
+                                    <td>{{ mark.subject.name }}</td>
+                                    <td>{{ mark.examination_session.year }}</td>
+                                    <td>{{ mark.score }}</td>
+                                    <td>{{ mark.grade }}</td>
+                                </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                <!-- End Table with stripped rows -->
+           </div>
+       </div>
+    </div>
+</div>
+</section>
+
+{% endblock %}

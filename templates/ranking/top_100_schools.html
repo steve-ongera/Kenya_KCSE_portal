@@ -1,47 +1,68 @@
 
+{% extends "base/base.html" %}
 
-<!-- top_100_schools.html -->
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Top 100 Schools</title>
-</head>
-<body>
-    <h1>Top 100 Schools</h1>
 
-    {% if schools_data %}
-    <table border="1">
-        <thead>
-            <tr>
-                <th>Rank</th>
-                <th>School Name</th>
-                <th>Mean Points</th>
-                <th>Mean Grade</th>
-                <th>Students Above C+</th>
-                <th>Number of Students</th>
-            </tr>
-        </thead>
-        <tbody>
-            {% for school_data in schools_data %}
-            <tr>
-                <td>{{ forloop.counter }}</td>
-                <td>{{ school_data.school.name }}</td>
-                <td>{{ school_data.mean_points }}</td>
-                <td>{{ school_data.mean_grade }}</td>
-                <td>
-                    <a href="{% url 'students_above_c_plus' school_data.school.id %}">
-                        {{ school_data.students_above_c_plus }}
-                    </a>
-                </td>
-                <td>{{ school_data.student_count }}</td>
-            </tr>
-            {% endfor %}
-        </tbody>
-    </table>
-    {% else %}
-        <p>No data available.</p>
-    {% endif %}
-</body>
-</html>
+
+{% block content %}
+
+<div class="pagetitle">
+    <h1>Top 100 Schools  </h1>
+    <nav>
+      <ol class="breadcrumb">
+        <li class="breadcrumb-item"><a href="{% url 'dashboard'%}">Home</a></li>
+        <li class="breadcrumb-item">Top 100 Schools</li>
+        <li class="breadcrumb-item active">Data</li>
+      </ol>
+    </nav>
+  </div><!-- End Page Title -->
+
+
+
+  <section class="section">
+    <div class="row">
+      <div class="col-lg-12">
+
+        <div class="card">
+          <div class="card-body">
+            <h5 class="card-title">Top 100 Schools </h5>
+            <!-- Table with stripped rows -->
+                {% if schools_data %}
+                <table class="table datatable">
+                    <thead>
+                        <tr>
+                            <th>Rank</th>
+                            <th>School Name</th>
+                            <th>Mean Points</th>
+                            <th>Mean Grade</th>
+                            <th>Students Above C+</th>
+                            <th>Number of Students</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for school_data in schools_data %}
+                        <tr>
+                            <td>{{ forloop.counter }}</td>
+                            <td>{{ school_data.school.name }}</td>
+                            <td>{{ school_data.mean_points|floatformat:4 }}</td>
+                            <td>{{ school_data.mean_grade }}</td>
+                            <td>
+                                <a href="{% url 'students_above_c_plus' school_data.school.id %}">
+                                    {{ school_data.students_above_c_plus }}
+                                </a>
+                            </td>
+                            <td>{{ school_data.student_count }}</td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+                {% else %}
+                    <p>No data available.</p>
+                {% endif %}
+         <!-- End Table with stripped rows -->
+    </div>
+</div>
+</div>
+</div>
+</section>
+
+{% endblock %}

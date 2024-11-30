@@ -12,10 +12,10 @@ urlpatterns = [
     path('', views.dashboard, name='dashboard'),
     
     # Student-related Routes
-    path('student/', views.student_performance_list, name='student_list2'),
+    path('student_performance_list/', views.student_performance_list, name='student_performance_list'),
     path('students/register/', views.student_registration, name='student_registration'),
     path('students/<int:student_id>/', views.student_detail, name='student_detail'),
-    path('students/', views.student_list, name='student_list'),  # List all students
+    path('students_list/', views.student_list, name='student_list'),  # List all students
     path('students/add/', views.add_student, name='add_student'),  # Add a student
     path('students/<int:student_id>/edit/', views.update_student, name='update_student'),  # Update student
     path('students/<int:student_id>/delete/', views.delete_student, name='delete_student'),  # Delete student
@@ -23,7 +23,7 @@ urlpatterns = [
     
     # Marks and Performance Routes
     path('marks/entry/', views.mark_entry, name='mark_entry'),
-    path('performance/students/', views.student_performance_list, name='student_performance'),
+    path('performance/students/', views.student_performance_list, name='student_performance'),# no need of this
     path('performance/schools/', views.school_performance, name='school_performance'),
     path('performance/subjects/', views.subject_performance, name='subject_performance'),
     path('performance/counties/', views.county_performance, name='county_performance'),

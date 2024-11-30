@@ -1,12 +1,23 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Student Performance</title>
-</head>
-<body>
-    <h1>Student Performance</h1>
+
+{% extends "base/base.html" %}
+
+
+
+{% block content %}
+
+<div class="pagetitle">
+    <h1>Data Tables</h1>
+    <nav>
+      <ol class="breadcrumb">
+        <li class="breadcrumb-item"><a href="{% url 'dashboard'%}">Home</a></li>
+        <li class="breadcrumb-item">Student Performance</li>
+        <li class="breadcrumb-item active">Data</li>
+      </ol>
+    </nav>
+  </div><!-- End Page Title -->
+
+  <section class='section'>
+
     
     <form method="get" action="">
         {{ filter_form.as_p }}
@@ -20,19 +31,29 @@
         {% endfor %}
     </ul>
 
-    <h3>List of Student Performances</h3>
-    <table>
-        <thead>
-            <tr>
-                <th>Student Name</th>
-                <th>School</th>
-                <th>Examination Session</th>
-                <th>Total Score</th>
-                <th>Mean Grade</th>
-            </tr>
-        </thead>
-        <tbody>
-            {% for performance in performances %}
+  </section>  
+
+  <section class="section">
+    <div class="row">
+      <div class="col-lg-12">
+
+        <div class="card">
+          <div class="card-body">
+            <h5 class="card-title">List of Student Performances</h5>
+            
+            <!-- Table with stripped rows -->
+            <table class="table datatable">
+              <thead>
+                <tr>
+                    <th>Student Name</th>
+                    <th>School</th>
+                    <th>Examination Session</th>
+                    <th>Total Score</th>
+                    <th>Mean Grade</th>
+                </tr>
+              </thead>
+              <tbody>
+                {% for performance in performances %}
                 <tr>
                     <td>{{ performance.student.first_name }} {{ performance.student.last_name }}</td>
                     <td>{{ performance.student.school.name }}</td>
@@ -41,7 +62,15 @@
                     <td>{{ performance.mean_grade }}</td>
                 </tr>
             {% endfor %}
-        </tbody>
-    </table>
-</body>
-</html>
+            </tbody>
+        </table>
+        <!-- End Table with stripped rows -->
+
+      </div>
+    </div>
+
+  </div>
+</div>
+</section>
+
+{% endblock %}

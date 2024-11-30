@@ -699,7 +699,7 @@ def rank_subjects(request):
             'total_students': total_students,
         })
 
-    # Sort subjects by mean points in descending order
+    # Sort subjects by mean points in descending orders
     subjects_data = sorted(subjects_data, key=lambda x: x['mean_points'], reverse=True)
 
     return render(request, 'ranking/subject_ranking.html', {'subjects_data': subjects_data})
