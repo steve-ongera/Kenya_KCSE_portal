@@ -1,4 +1,7 @@
 # kcse_portal/views.py
+from django.contrib import messages
+from django.contrib.auth import authenticate, login, logout
+from django.contrib.auth.models import User
 from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib.auth.decorators import login_required, permission_required
 from django.db.models import Avg, Sum, Count, Q
@@ -703,3 +706,57 @@ def rank_subjects(request):
     subjects_data = sorted(subjects_data, key=lambda x: x['mean_points'], reverse=True)
 
     return render(request, 'ranking/subject_ranking.html', {'subjects_data': subjects_data})
+
+
+#auth
+
+# Login view
+def login_view(request):
+    if request.method == 'POST':
+        username = request.POST.get('username')
+        password = request.POST.get('password')
+        user = authenticate(request, username=username, password=password)
+        if user is not None:
+            login(request, user)
+            messages.success(request, f'Welcome back, {user.first_name}!')
+            return redirect('dashboard')  # Redirect to your dashboard or home page
+        else:
+            messages.error(request, 'Invalid username or password.')
+    return render(request, 'registration/login.html')
+
+# Register view
+def register_view(request):
+    if request.method == 'POST':
+        username = request.POST.get('username')
+        first_name = request.POST.get('first_name')
+        last_name = request.POST.get('last_name')
+        email = request.POST.get('email')
+        password = request.POST.get('password')
+        password_confirm = request.POST.get('password_confirm')
+
+        if password == password_confirm:
+            if User.objects.filter(username=username).exists():
+                messages.error(request, 'Username already exists.')
+            elif User.objects.filter(email=email).exists():
+                messages.error(request, 'Email is already registered.')
+            else:
+                user = User.objects.create_user(
+                    username=username,
+                    first_name=first_name,
+                    last_name=last_name,
+                    email=email,
+                    password=password
+                )
+                user.save()
+                messages.success(request, 'Account created successfully! You can now log in.')
+                return redirect('login')  # Redirect to login after registration
+        else:
+            messages.error(request, 'Passwords do not match.')
+    return render(request, 'registration/register.html')
+
+def custom_logout(request):
+    logout(request)
+    messages.success(request, "You have been logged out successfully.")
+    return redirect('login')
+
+

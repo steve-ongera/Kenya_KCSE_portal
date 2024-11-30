@@ -6,7 +6,7 @@ from django.urls import path, include
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('', include('portal.urls')),  # Main application URLs
-    path('accounts/', include('django.contrib.auth.urls')),  # Additional auth URLs
+    #path('accounts/', include('django.contrib.auth.urls')),  # Additional auth URLs
 ]
 
 # Serve media files in development
