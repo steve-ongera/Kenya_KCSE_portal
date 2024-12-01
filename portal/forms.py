@@ -6,6 +6,7 @@ from .models import (
     Student, StudentMarks, Subject, 
     School, County, ExaminationSession ,StudentOverallPerformance
 )
+from .models import *
 
 class StudentRegistrationForm(forms.ModelForm):
     """Form for registering new students"""
@@ -220,3 +221,8 @@ class StudentOverallPerformanceForm(forms.ModelForm):
     class Meta:
         model = StudentOverallPerformance
         fields = ['student', 'examination_session', 'total_score', 'mean_grade', 'total_points']
+
+class ExamCenterForm(forms.ModelForm):
+    class Meta:
+        model = ExamCenter
+        fields = ['name', 'location', 'capacity', 'contact_number']        
