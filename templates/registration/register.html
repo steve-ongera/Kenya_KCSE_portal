@@ -11,7 +11,7 @@
   <meta content="" name="keywords">
 
   <!-- Favicons -->
-  <link href="{% static 'assets/img/favicon.png' %}" rel="icon">
+  <link href="{% static 'assets/img/logo2.png' %}" rel="icon">
   <link href="{% static 'assets/img/apple-touch-icon.png' %}" rel="apple-touch-icon">
 
   <!-- Google Fonts -->
@@ -83,15 +83,22 @@
 
                     <div class="col-12">
                       <label for="password" class="form-label">Password</label>
-                      <input type="password" id="password" name="password" class="form-control" required>
+                      <div class="position-relative">
+                        <input type="password" id="password" name="password" class="form-control" required>
+                        <i id="togglePassword" class="bi bi-eye-slash position-absolute" style="right: 10px; top: 50%; transform: translateY(-50%); cursor: pointer;"></i>
+                      </div>
                       <div class="invalid-feedback">Please enter your password!</div>
                     </div>
-
+                    
                     <div class="col-12">
                       <label for="password2" class="form-label">Confirm Password</label>
-                      <input type="password" id="password2" name="password2" class="form-control" required>
+                      <div class="position-relative">
+                        <input type="password" id="password2" name="password2" class="form-control" required>
+                        <i id="togglePassword2" class="bi bi-eye-slash position-absolute" style="right: 10px; top: 50%; transform: translateY(-50%); cursor: pointer;"></i>
+                      </div>
                       <div class="invalid-feedback">Please confirm your password!</div>
                     </div>
+                    
 
                     <div class="col-12">
                       <button class="btn btn-primary w-100" type="submit">Register</button>
@@ -122,6 +129,7 @@
   <!-- Vendor JS Files -->
   <script src="{% static 'assets/vendor/bootstrap/js/bootstrap.bundle.min.js' %}"></script>
   <script src="{% static 'assets/js/main.js' %}"></script>
+  <script src="{% static 'assets/js/eye.js'%}"></script>
 
 </body>
 

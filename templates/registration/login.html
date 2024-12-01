@@ -12,7 +12,7 @@
   <meta content="" name="keywords">
 
   <!-- Favicons -->
-  <link href="{% static 'assets/img/favicon.png'%}" rel="icon">
+  <link href="{% static 'assets/img/logo2.png'%}" rel="icon">
   <link href="{% static 'assets/img/apple-touch-icon.png'%}" rel="apple-touch-icon">
 
   <!-- Google Fonts -->
@@ -31,6 +31,48 @@
   <!-- Template Main CSS File -->
   <link href="{% static 'assets/css/style.css'%}" rel="stylesheet">
 
+
+
+<!-- Bootstrap JS (Include this just before the closing </body> tag) -->
+<script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@4.5.2/dist/js/bootstrap.bundle.min.js"></script>
+
+<style>
+  /* Style for the alert container */
+.alert {
+    position: relative;
+    padding: 15px;
+    margin: 15px 0;
+    border-radius: 5px;
+    background-color: #f8d7da;
+    color: #721c24;
+    border: 1px solid #f5c6cb;
+}
+
+/* Style for the alert heading (message content) */
+.alert h5 {
+    margin: 0;
+    font-size: 16px;
+}
+
+/* Close button style */
+.alert .close {
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    font-size: 20px;
+    background: none;
+    border: none;
+    color: #721c24;
+    cursor: pointer;
+}
+
+/* Close button on hover */
+.alert .close:hover {
+    color: #5c1e1e;
+}
+
+</style>
 </head>
 
 <body>
@@ -56,13 +98,17 @@
 
                 <div class="card-body">
 
-                    {% if form.non_field_errors %}
-                        <div class="alert alert-danger">
-                            {% for error in form.non_field_errors %}
-                                <p>{{ error }}</p>
-                            {% endfor %}
-                        </div>
-                    {% endif %}
+                  {% if messages %}
+                      <div class="alert alert-danger alert-dismissible fade show" role="alert">
+                          {% for message in messages %}
+                              <h5>{{ message }}</h5>
+                          {% endfor %}
+                          <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                              <span aria-hidden="true">&times;</span>
+                          </button>
+                      </div>
+                  {% endif %}
+
 
                   <div class="pt-4 pb-2">
                     <h5 class="card-title text-center pb-0 fs-4">Login to Your Account</h5>
@@ -81,11 +127,15 @@
                       </div>
                     </div>
 
-                    <div class="col-12">
-                      <label for="yourPassword" class="form-label">Password</label>
-                      <input type="password"  id="password" name="password"  class="form-control"  required>
-                      <div class="invalid-feedback">Please enter your password!</div>
-                    </div>
+                    <div class="form-group">
+                      <label for="password" class="sr-only">Password</label>
+                      <div class="position-relative">
+                          <input type="password" id="password" name="password" class="form-control form-control-lg"  required>
+                          <i id="togglePassword" class="bi bi-eye-slash position-absolute" style="right: 10px; top: 50%; transform: translateY(-50%); cursor: pointer;"></i>
+                      </div>
+                  </div>
+                  
+
 
                     <div class="col-12">
                       <div class="form-check">
@@ -135,6 +185,7 @@
 
   <!-- Template Main JS File -->
   <script src="{% static 'assets/js/main.js'%}"></script>
+  <script src="{% static 'assets/js/eye.js'%}"></script>
 
 </body>
 
