@@ -2,6 +2,16 @@
 from django.db import models
 from django.core.validators import MinValueValidator, MaxValueValidator
 
+
+class ExamCenter(models.Model):
+    name = models.CharField(max_length=100, unique=True)
+    location = models.CharField(max_length=200)
+    capacity = models.PositiveIntegerField()
+    contact_number = models.CharField(max_length=15)
+
+    def __str__(self):
+        return self.name
+
 def calculate_grade(mean_score):
     """Determine grade based on mean score."""
     if mean_score >= 80:
@@ -164,3 +174,4 @@ class StudentOverallPerformance(models.Model):
     
     def __str__(self):
         return f"{self.student.index_number} - {self.examination_session.year} - {self.mean_grade}"
+
