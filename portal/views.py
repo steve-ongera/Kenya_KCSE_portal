@@ -1,5 +1,8 @@
 # kcse_portal/views.py
 from django.contrib import messages
+from django.http import JsonResponse
+from django.template.loader import render_to_string
+from django.utils.html import strip_tags
 from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.models import User
 from django.shortcuts import render, redirect, get_object_or_404
@@ -10,6 +13,7 @@ from django.db.models import F
 import pandas as pd
 import io
 from collections import defaultdict
+from django.urls import reverse
 
 from .models import (
     County, School, Student, Subject, 
@@ -760,3 +764,138 @@ def custom_logout(request):
     return redirect('login')
 
 
+# Create exam cenetr views
+def create_exam_center(request):
+    if request.method == "POST":
+        form = ExamCenterForm(request.POST)
+        if form.is_valid():
+            form.save()
+            return redirect('list_exam_centers')
+    else:
+        form = ExamCenterForm()
+    return render(request, 'exam_centers/create.html', {'form': form})
+
+# Read
+def list_exam_centers(request):
+    centers = ExamCenter.objects.all()
+    return render(request, 'exam_centers/list.html', {'centers': centers})
+
+# Update
+def update_exam_center(request, pk):
+    center = get_object_or_404(ExamCenter, pk=pk)
+    if request.method == "POST":
+        form = ExamCenterForm(request.POST, instance=center)
+        if form.is_valid():
+            form.save()
+            return redirect('list_exam_centers')
+    else:
+        form = ExamCenterForm(instance=center)
+    return render(request, 'exam_centers/update.html', {'form': form})
+
+# Delete
+def delete_exam_center(request, pk):
+    center = get_object_or_404(ExamCenter, pk=pk)
+    if request.method == "POST":
+        center.delete()
+        return redirect('list_exam_centers')
+    return render(request, 'exam_centers/delete.html', {'center': center})
+
+#time table views
+
+def timetable_list(request):
+    timetables = ExamTimeTable.objects.select_related('session').all()
+    return render(request, 'time_table/timetable_list.html', {'timetables': timetables})
+
+def create_timetable(request):
+    if request.method == 'POST':
+        form = ExamTimeTableForm(request.POST, request.FILES)
+        if form.is_valid():
+            form.save()
+            messages.success(request, 'Exam timetable created successfully.')
+            return redirect('timetable_list')
+    else:
+        form = ExamTimeTableForm()
+    return render(request, 'time_table/timetable_form.html', {'form': form})
+
+def update_timetable(request, pk):
+    timetable = get_object_or_404(ExamTimeTable, pk=pk)
+    if request.method == 'POST':
+        form = ExamTimeTableForm(request.POST, request.FILES, instance=timetable)
+        if form.is_valid():
+            form.save()
+            messages.success(request, 'Exam timetable updated successfully.')
+            return redirect('timetable_list')
+    else:
+        form = ExamTimeTableForm(instance=timetable)
+    return render(request, 'time_table/timetable_form.html', {'form': form})
+
+def delete_timetable(request, pk):
+    timetable = get_object_or_404(ExamTimeTable, pk=pk)
+    timetable.delete()
+    messages.success(request, 'Exam timetable deleted successfully.')
+    return redirect('timetable_list')
+
+
+def exam_timetable_detail(request, pk):
+    # Get the ExamTimeTable object by its primary key (pk)
+    timetable = get_object_or_404(ExamTimeTable, pk=pk)
+    
+    # Return the rendered template with the timetable object
+    return render(request, 'time_table/exam_timetable_detail.html', {'timetable': timetable})
+
+
+# View to display the help and support page
+def help_and_support(request):
+    return render(request, 'help/help_and_support.html')
+
+
+# View to display the system settings page
+def system_settings(request):
+    return render(request, 'help/system_settings.html')
+
+#resources views
+def add_resource(request):
+    if request.method == 'POST':
+        form = ResourceForm(request.POST, request.FILES)
+        if form.is_valid():
+            form.save()
+            messages.success(request, "Resource added successfully!")
+            return redirect('resources_list')  # Redirect to the resource list page
+        else:
+            messages.error(request, "Error adding resource. Please try again.")
+    else:
+        form = ResourceForm()
+
+    return render(request, 'resources/add_resource.html', {'form': form})
+
+
+def resources_list(request):
+    resources = Resource.objects.filter(is_active=True).order_by('-created_at')
+    return render(request, 'resources/resources_list.html', {'resources': resources})
+
+def resource_detail(request, resource_id):
+    resource = Resource.objects.get(id=resource_id)
+    resource.increment_views()  # Increment views count each time a resource is accessed
+    return render(request, 'resources/resource_detail.html', {'resource': resource})
+
+
+def resource_search(request):
+    query = request.GET.get('query', '')
+    resources = Resource.objects.filter(title__icontains=query)
+
+    results = []
+
+    for resource in resources:
+        # Truncate description to 20 words (you can adjust this number)
+        truncated_description = strip_tags(resource.description)  # Remove any HTML tags
+        words = truncated_description.split()
+        if len(words) > 20:
+            truncated_description = ' '.join(words[:20]) + '...'  # Add three dots if the description is too long
+
+        results.append({
+            'title': resource.title,
+            'description': truncated_description,
+            'url': reverse('resource_detail', args=[resource.id]),
+        })
+
+    return JsonResponse({'resources': results})

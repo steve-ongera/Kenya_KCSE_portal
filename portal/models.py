@@ -1,6 +1,7 @@
 # kcse_portal/models.py
 from django.db import models
 from django.core.validators import MinValueValidator, MaxValueValidator
+from django.urls import reverse
 
 
 class ExamCenter(models.Model):
@@ -11,6 +12,9 @@ class ExamCenter(models.Model):
 
     def __str__(self):
         return self.name
+    
+
+    
 
 def calculate_grade(mean_score):
     """Determine grade based on mean score."""
@@ -124,6 +128,18 @@ class ExaminationSession(models.Model):
     
     def __str__(self):
         return f"KCSE {self.year}"
+    
+
+class ExamTimeTable(models.Model):
+    name = models.CharField(max_length= 50 , blank=True, null=True)
+    start_date = models.DateField(blank=True, null=True)
+    end_date = models.DateField(blank=True, null=True)
+    session = models.ForeignKey(ExaminationSession, on_delete=models.CASCADE, related_name='timetables')
+    time_table_pdf = models.FileField(upload_to='time_tables/', blank=True, null=True)
+
+    def __str__(self):
+        return f"Timetable for {self.session.year} "  
+      
 
 class StudentMarks(models.Model):
     """Stores marks for individual students in specific subjects"""
@@ -175,3 +191,40 @@ class StudentOverallPerformance(models.Model):
     def __str__(self):
         return f"{self.student.index_number} - {self.examination_session.year} - {self.mean_grade}"
 
+
+class ResourceCategory(models.Model):
+    """Category of resources, e.g., KCSE, KCPE, etc."""
+    name = models.CharField(max_length=100, unique=True)
+    description = models.TextField(blank=True, null=True)
+
+    def __str__(self):
+        return self.name
+
+
+class Resource(models.Model):
+    """A model to store revision materials like KCSE revision papers."""
+    title = models.CharField(max_length=255)
+    description = models.TextField(blank=True, null=True)
+    category = models.ForeignKey(ResourceCategory, related_name="resources", on_delete=models.SET_NULL, null=True, blank=True)
+    file = models.FileField(upload_to='resources/', null=True, blank=True)
+    created_at = models.DateTimeField(auto_now_add=True)
+    updated_at = models.DateTimeField(auto_now=True)
+    views = models.PositiveIntegerField(default=0)
+    is_active = models.BooleanField(default=True)
+
+    def get_absolute_url(self):
+        return reverse('resource_detail', args=[str(self.id)])
+
+    def __str__(self):
+        return self.title
+
+    def increment_views(self):
+        """Increment the view count when the resource is accessed."""
+        self.views += 1
+        self.save()
+
+    def get_file_url(self):
+        """Returns the URL of the uploaded resource file."""
+        if self.file:
+            return self.file.url
+        return None

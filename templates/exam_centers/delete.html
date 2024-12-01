@@ -1,0 +1,38 @@
+{% extends "base/base.html" %}
+
+{% block content %}
+
+<div class="pagetitle">
+    <h1>Delete Exam Center</h1>
+    <nav>
+        <ol class="breadcrumb">
+            <li class="breadcrumb-item"><a href="{% url 'dashboard' %}">Home</a></li>
+            <li class="breadcrumb-item"><a href="{% url 'list_exam_centers' %}">Exam Centers</a></li>
+            <li class="breadcrumb-item active">Delete</li>
+        </ol>
+    </nav>
+</div><!-- End Page Title -->
+
+<section class="section">
+    <div class="row">
+        <div class="col-lg-6">
+
+            <div class="card">
+                <div class="card-body">
+                    <h5 class="card-title">Delete Exam Center</h5>
+                    <p>Are you sure you want to delete the exam center <strong>{{ center.name }}</strong>?</p>
+
+                    <form method="post">
+                        {% csrf_token %}
+                        <button type="submit" class="btn btn-danger">Delete</button>
+                        <a href="{% url 'list_exam_centers' %}" class="btn btn-secondary">Cancel</a>
+                    </form>
+
+                </div>
+            </div>
+
+        </div>
+    </div>
+</section>
+
+{% endblock %}

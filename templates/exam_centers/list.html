@@ -1,0 +1,62 @@
+{% extends "base/base.html" %}
+
+{% block content %}
+
+<div class="pagetitle">
+    <h1>Exam Centers</h1>
+    <nav>
+        <ol class="breadcrumb">
+            <li class="breadcrumb-item"><a href="{% url 'dashboard' %}">Home</a></li>
+            <li class="breadcrumb-item">Exam Centers</li>
+            <li class="breadcrumb-item active">List</li>
+        </ol>
+    </nav>
+</div><!-- End Page Title -->
+
+<section class="section">
+    <div class="row">
+        <div class="col-lg-12">
+
+            <div class="card">
+                <div class="card-body">
+                    <h5 class="card-title">List of Exam Centers</h5>
+
+                    <a class="btn btn-primary mb-3" href="{% url 'create_exam_center' %}">Add New Exam Center</a>
+
+                    <!-- Table with stripped rows -->
+                    <div class="table-responsive">
+                        <table class="table table-striped datatable">
+                            <thead>
+                                <tr>
+                                    <th>Name</th>
+                                    <th>Location</th>
+                                    <th>Capacity</th>
+                                    <th>Contact Number</th>
+                                    <th>Actions</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {% for center in centers %}
+                                    <tr>
+                                        <td>{{ center.name }}</td>
+                                        <td>{{ center.location }}</td>
+                                        <td>{{ center.capacity }}</td>
+                                        <td>{{ center.contact_number }}</td>
+                                        <td>
+                                            <a class="btn btn-sm btn-warning" href="{% url 'update_exam_center' center.pk %}">Edit</a>
+                                            <a class="btn btn-sm btn-danger" href="{% url 'delete_exam_center' center.pk %}">Delete</a>
+                                        </td>
+                                    </tr>
+                                {% endfor %}
+                            </tbody>
+                        </table>
+                    </div><!-- End Table -->
+
+                </div>
+            </div>
+
+        </div>
+    </div>
+</section>
+
+{% endblock %}

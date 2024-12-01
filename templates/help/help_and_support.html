@@ -1,0 +1,137 @@
+{% extends "base/base.html" %}
+
+{% block content %}
+  <div class="pagetitle">
+    <h1>Help and Support</h1>
+    <nav>
+      <ol class="breadcrumb">
+        <li class="breadcrumb-item"><a href="{% url 'dashboard' %}">Home</a></li>
+        <li class="breadcrumb-item active">Help and Support</li>
+      </ol>
+    </nav>
+  </div><!-- End Page Title -->
+
+  <section class="section">
+    <div class="row">
+      <div class="col-lg-12">
+        <div class="card">
+          <div class="card-body">
+            <h5 class="card-title">Welcome to Help and Support</h5>
+            <p>If you're facing any issues, have questions, or need assistance, you've come to the right place. Here, we’ve provided answers to frequently asked questions (FAQ), troubleshooting tips, and contact details for further support.</p>
+
+            <hr>
+
+            <h6><strong>Frequently Asked Questions (FAQ)</strong></h6>
+            <div class="faq-section">
+              <h6><strong>1. How do I create an Exam Timetable?</strong></h6>
+              <p>To create a new exam timetable, follow these steps:
+                <ol>
+                  <li>Navigate to the "Exam Timetable" section in the navigation bar.</li>
+                  <li>Click on the "Create New Timetable" button.</li>
+                  <li>Fill out the form with details such as the name of the timetable, start date, end date, and upload the PDF of the timetable.</li>
+                  <li>Click "Save" to add your timetable to the list.</li>
+                </ol>
+              </p>
+
+              <h6><strong>2. How can I download my Exam Timetable?</strong></h6>
+              <p>To download your timetable:
+                <ol>
+                  <li>Go to the "Exam Timetable" section of the dashboard.</li>
+                  <li>Select the timetable you wish to download.</li>
+                  <li>If a PDF is available, you will see a "Download" button next to the timetable. Click on it to start the download.</li>
+                </ol>
+              </p>
+
+              <h6><strong>3. What should I do if my timetable is not showing?</strong></h6>
+              <p>If your timetable is not appearing, here are a few steps to resolve the issue:
+                <ul>
+                  <li>Check if the timetable has been successfully created. If not, create a new one.</li>
+                  <li>If you cannot find your timetable in the list, refresh the page.</li>
+                  <li>If the issue persists, please contact our support team via email at <strong>support@example.com</strong>.</li>
+                </ul>
+              </p>
+
+              <h6><strong>4. What if the PDF is not downloading?</strong></h6>
+              <p>If you're unable to download the timetable PDF, try these solutions:
+                <ul>
+                  <li>Ensure you have a stable internet connection.</li>
+                  <li>Try using a different browser (e.g., Chrome, Firefox, Safari).</li>
+                  <li>Clear your browser cache and cookies.</li>
+                  <li>If the problem continues, reach out to our support team for assistance.</li>
+                </ul>
+              </p>
+
+              <h6><strong>5. Can I upload multiple PDF versions of the timetable?</strong></h6>
+              <p>Currently, the system allows only one PDF file per timetable. However, you can update the existing timetable PDF by editing the timetable entry and uploading a new file.</p>
+
+              <h6><strong>6. How can I update my timetable?</strong></h6>
+              <p>To update an existing timetable, follow these steps:
+                <ul>
+                  <li>Navigate to the "Exam Timetable" section.</li>
+                  <li>Select the timetable you wish to update.</li>
+                  <li>Click the "Edit" button.</li>
+                  <li>Make the necessary changes and click "Save" to update the timetable.</li>
+                </ul>
+              </p>
+
+              <h6><strong>7. How do I delete a timetable?</strong></h6>
+              <p>If you no longer need a timetable, you can delete it by:
+                <ul>
+                  <li>Selecting the timetable you want to delete.</li>
+                  <li>Clicking the "Delete" button next to the timetable entry.</li>
+                  <li>Confirming your decision to delete the timetable when prompted.</li>
+                </ul>
+              </p>
+
+              <h6><strong>8. What do I do if I need more help?</strong></h6>
+              <p>If you’re unable to resolve your issue or have additional questions, please contact our support team using the contact details below. We are available to assist you.</p>
+            </div>
+
+            <hr>
+
+            <h6><strong>Contact Us</strong></h6>
+            <p>If you need personalized help or assistance with any of our services, please contact our support team:</p>
+            <ul>
+              <li><strong>Email:</strong> <a href="mailto:support@example.com">support@example.com</a></li>
+              <li><strong>Phone:</strong> +123 456 7890</li>
+              <li><strong>Support Hours:</strong> Monday to Friday, 9:00 AM to 5:00 PM (UTC)</li>
+              <li><strong>Address:</strong> 123 Example Street, City, Country</li>
+            </ul>
+
+            <hr>
+
+            <h6><strong>System Requirements</strong></h6>
+            <p>To ensure that you can use our services smoothly, please make sure your system meets the following requirements:</p>
+            <ul>
+              <li><strong>Operating System:</strong> Windows 7 or later, macOS 10.10 or later, Linux</li>
+              <li><strong>Browser:</strong> Chrome, Firefox, Safari (latest versions)</li>
+              <li><strong>PDF Reader:</strong> Any PDF reader (Adobe Acrobat Reader, Foxit Reader, etc.)</li>
+              <li><strong>Internet Speed:</strong> A stable internet connection (recommended speed of 5 Mbps or higher)</li>
+            </ul>
+
+            <hr>
+
+            <h6><strong>System Limitations</strong></h6>
+            <p>While we strive to provide a seamless experience, there are a few limitations to keep in mind:</p>
+            <ul>
+              <li>Only one PDF per timetable can be uploaded.</li>
+              <li>The system is optimized for use with modern browsers. Older browsers may not support all features.</li>
+              <li>PDF files must be under 10 MB in size. If your file exceeds this limit, try compressing it before uploading.</li>
+            </ul>
+
+            <hr>
+
+            <h6><strong>Technical Support</strong></h6>
+            <p>If you encounter any technical difficulties while using our platform, please follow these steps:</p>
+            <ul>
+              <li>Ensure that your internet connection is stable.</li>
+              <li>Update your browser to the latest version.</li>
+              <li>Clear your browser cache and cookies to improve performance.</li>
+              <li>If the issue persists, contact our technical support team for further assistance.</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+{% endblock %}

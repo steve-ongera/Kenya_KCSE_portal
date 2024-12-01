@@ -225,4 +225,21 @@ class StudentOverallPerformanceForm(forms.ModelForm):
 class ExamCenterForm(forms.ModelForm):
     class Meta:
         model = ExamCenter
-        fields = ['name', 'location', 'capacity', 'contact_number']        
+        fields = ['name', 'location', 'capacity', 'contact_number']    
+
+
+
+class ExamTimeTableForm(forms.ModelForm):
+    class Meta:
+        model = ExamTimeTable
+        fields = '__all__'
+               
+
+class ResourceForm(forms.ModelForm):
+    class Meta:
+        model = Resource
+        fields = ['title', 'description', 'category', 'file', 'is_active']
+    
+    # Optional: Customize form validation or widgets here if needed
+    # Example: Add a widget for the description to use a textarea
+    description = forms.CharField(widget=forms.Textarea(attrs={'rows': 4, 'placeholder': 'Enter a brief description of the resource'}))

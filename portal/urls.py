@@ -8,6 +8,8 @@ urlpatterns = [
     path('login/', views.login_view, name='login'),
     path('register/', views.register_view, name='register'),
     path('logout/', views.custom_logout, name='logout'),
+    path('help-and-support/', views.help_and_support, name='help_and_support'),
+    path('system-settings/', views.system_settings, name='system_settings'),
     
     # Dashboard and Home Routes
     path('', views.dashboard, name='dashboard'),
@@ -64,6 +66,22 @@ urlpatterns = [
     path('top-100-schools/', views.top_100_schools, name='top_100_schools'),
     path('students-above-c-plus/<int:school_id>/', views.students_above_c_plus, name='students_above_c_plus'),
     path('subject-ranking/', views.rank_subjects, name='subject_ranking'),
+    #exam centers
+    path('exam-centers/', views.list_exam_centers, name='list_exam_centers'),
+    path('exam-centers/create/', views.create_exam_center, name='create_exam_center'),
+    path('exam-centers/update/<int:pk>/', views.update_exam_center, name='update_exam_center'),
+    path('exam-centers/delete/<int:pk>/', views.delete_exam_center, name='delete_exam_center'),
+    #timetable
+    path('timetable/', views.timetable_list, name='timetable_list'),
+    path('timetable/create/', views.create_timetable, name='create_timetable'),
+    path('timetable/update/<int:pk>/', views.update_timetable, name='update_timetable'),
+    path('timetable/delete/<int:pk>/', views.delete_timetable, name='delete_timetable'),
+    path('exam-timetable/<int:pk>/', views.exam_timetable_detail, name='exam_timetable_detail'),
+    #resources views
+    path('resources/add/', views.add_resource, name='add_resource'),
+    path('resources/', views.resources_list, name='resources_list'),
+    path('resources/<int:resource_id>/', views.resource_detail, name='resource_detail'),
+    path('resource-search/', views.resource_search, name='resource_search'),
     
     # Export Routes
     path('export/', views.data_export, name='data_export'),

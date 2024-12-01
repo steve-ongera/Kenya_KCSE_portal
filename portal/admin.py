@@ -4,6 +4,7 @@ from .models import (
     ExaminationSession, StudentMarks, 
     StudentOverallPerformance
 )
+from .models import *
 
 @admin.register(County)
 class CountyAdmin(admin.ModelAdmin):
@@ -42,3 +43,13 @@ class StudentOverallPerformanceAdmin(admin.ModelAdmin):
     list_display = ('student', 'examination_session', 'total_score', 'mean_grade')
     list_filter = ('examination_session', 'mean_grade')
     search_fields = ('student__index_number',)
+
+
+class ResourceAdmin(admin.ModelAdmin):
+    list_display = ('title', 'category', 'created_at', 'updated_at', 'is_active', 'views')
+    search_fields = ('title', 'description')
+    list_filter = ('category', 'is_active')
+    ordering = ('-created_at',)
+
+admin.site.register(Resource, ResourceAdmin)
+admin.site.register(ResourceCategory)
