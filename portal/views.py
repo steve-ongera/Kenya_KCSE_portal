@@ -899,3 +899,36 @@ def resource_search(request):
         })
 
     return JsonResponse({'resources': results})
+
+
+@login_required
+def profile_detail(request):
+    try:
+        # Attempt to get the profile for the logged-in user
+        profile = request.user.profile
+    except Profile.DoesNotExist:
+        # If no profile exists, you can either create it or redirect the user
+        # For now, let's redirect the user to a page to create a profile
+        return redirect('create_profile')  # You can create a view to create a profile
+    
+    return render(request, 'registration/profile_detail.html', {'profile': profile})
+
+@login_required
+def create_profile(request):
+    # Check if the logged-in user already has a profile
+    if hasattr(request.user, 'profile'):
+        return redirect('profile_detail')  # If the user already has a profile, redirect to profile detail
+
+    # Handle the form submission
+    if request.method == 'POST':
+        form = ProfileForm(request.POST, request.FILES)
+        if form.is_valid():
+            profile = form.save(commit=False)
+            profile.user = request.user  # Associate the profile with the logged-in user
+            profile.save()
+            return redirect('profile_detail')  # Redirect to profile detail after saving
+
+    else:
+        form = ProfileForm()
+
+    return render(request, 'registration/create_profile.html', {'form': form})

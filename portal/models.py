@@ -2,6 +2,7 @@
 from django.db import models
 from django.core.validators import MinValueValidator, MaxValueValidator
 from django.urls import reverse
+from django.contrib.auth.models import User
 
 
 class ExamCenter(models.Model):
@@ -228,3 +229,28 @@ class Resource(models.Model):
         if self.file:
             return self.file.url
         return None
+    
+class Profile(models.Model):
+    ROLE_CHOICES = (
+        ('Admin', 'Admin'),
+        ('Supervisor', 'Supervisor'),
+        ('Teacher', 'Teacher'),
+        ('Student', 'Student'),
+    )
+    
+    user = models.OneToOneField(User, on_delete=models.CASCADE, related_name='profile')
+    username = models.CharField(max_length=150, blank=True, null=True)
+    about = models.TextField(blank=True, null=True)
+    role = models.CharField(max_length=50, choices=ROLE_CHOICES, default='Student')
+    full_names = models.CharField(max_length=200)
+    school = models.CharField(max_length=200, blank=True, null=True)
+    county = models.CharField(max_length=100, blank=True, null=True)
+    address = models.TextField(blank=True, null=True)
+    phone = models.CharField(max_length=15, blank=True, null=True)
+    email = models.EmailField(blank=True, null=True)
+    profile_image = models.ImageField(upload_to='profile_images/', default='profile_images/default.png')
+    website = models.URLField(blank=True, null=True)
+
+    def __str__(self):
+        return self.full_names    
+

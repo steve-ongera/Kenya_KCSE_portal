@@ -10,6 +10,8 @@ urlpatterns = [
     path('logout/', views.custom_logout, name='logout'),
     path('help-and-support/', views.help_and_support, name='help_and_support'),
     path('system-settings/', views.system_settings, name='system_settings'),
+    path('profile/', views.profile_detail, name='profile_detail'),
+    path('create-profile/', views.create_profile, name='create_profile'),
     
     # Dashboard and Home Routes
     path('', views.dashboard, name='dashboard'),

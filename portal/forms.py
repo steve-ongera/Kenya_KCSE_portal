@@ -243,3 +243,8 @@ class ResourceForm(forms.ModelForm):
     # Optional: Customize form validation or widgets here if needed
     # Example: Add a widget for the description to use a textarea
     description = forms.CharField(widget=forms.Textarea(attrs={'rows': 4, 'placeholder': 'Enter a brief description of the resource'}))
+
+class ProfileForm(forms.ModelForm):
+    class Meta:
+        model = Profile
+        fields = '__all__'

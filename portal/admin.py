@@ -53,3 +53,5 @@ class ResourceAdmin(admin.ModelAdmin):
 
 admin.site.register(Resource, ResourceAdmin)
 admin.site.register(ResourceCategory)
+
+admin.site.register(Profile)
