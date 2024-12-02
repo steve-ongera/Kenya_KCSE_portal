@@ -32,7 +32,7 @@ from django.db.models import Avg
 @login_required
 def dashboard(request):
     # Get the top 6 students sorted by total score in descending order
-    top_students = StudentOverallPerformance.objects.all().order_by('-total_score')[:6]
+    top_students = StudentOverallPerformance.objects.all().order_by('-total_score')[:14]
 
     # Add school information to each student's performance
     students_with_school = []

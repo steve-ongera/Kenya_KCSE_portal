@@ -251,3 +251,38 @@ class ProfileForm(forms.ModelForm):
             'profile_image', 'full_names', 'about', 'role', 'school', 
             'county', 'address', 'phone', 'email'
         ]
+
+class UserRegistrationForm(forms.ModelForm):
+    password = forms.CharField(
+        label="Password",
+        widget=forms.PasswordInput(attrs={"class": "form-control"}),
+        min_length=8,
+    )
+    password2 = forms.CharField(
+        label="Confirm Password",
+        widget=forms.PasswordInput(attrs={"class": "form-control"}),
+    )
+
+    class Meta:
+        model = User
+        fields = ["username", "email"]
+        widgets = {
+            "username": forms.TextInput(attrs={"class": "form-control"}),
+            "email": forms.EmailInput(attrs={"class": "form-control"}),
+        }
+
+    def clean_email(self):
+        email = self.cleaned_data.get("email")
+        if User.objects.filter(email=email).exists():
+            raise ValidationError("This email is already in use.")
+        return email
+
+    def clean(self):
+        cleaned_data = super().clean()
+        password = cleaned_data.get("password")
+        password2 = cleaned_data.get("password2")
+
+        if password and password2 and password != password2:
+            raise ValidationError("Passwords do not match.")
+        return cleaned_data
+
