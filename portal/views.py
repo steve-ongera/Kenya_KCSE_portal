@@ -750,33 +750,22 @@ def login_view(request):
 
 # Register view
 def register_view(request):
-    if request.method == 'POST':
-        username = request.POST.get('username')
-        first_name = request.POST.get('first_name')
-        last_name = request.POST.get('last_name')
-        email = request.POST.get('email')
-        password = request.POST.get('password')
-        password_confirm = request.POST.get('password_confirm')
-
-        if password == password_confirm:
-            if User.objects.filter(username=username).exists():
-                messages.error(request, 'Username already exists.')
-            elif User.objects.filter(email=email).exists():
-                messages.error(request, 'Email is already registered.')
-            else:
-                user = User.objects.create_user(
-                    username=username,
-                    first_name=first_name,
-                    last_name=last_name,
-                    email=email,
-                    password=password
-                )
-                user.save()
-                messages.success(request, 'Account created successfully! You can now log in.')
-                return redirect('login')  # Redirect to login after registration
+    if request.method == "POST":
+        form = UserRegistrationForm(request.POST)
+        if form.is_valid():
+            user = form.save(commit=False)
+            user.set_password(form.cleaned_data["password"])
+            user.save()
+            messages.success(request, "Your account has been created successfully!")
+            return redirect("login")
         else:
-            messages.error(request, 'Passwords do not match.')
-    return render(request, 'registration/register.html')
+            messages.error(request, "Please correct the errors below.")
+    else:
+        form = UserRegistrationForm()
+    
+    return render(request, "registration/register.html", {"form": form})
+
+
 
 def custom_logout(request):
     logout(request)
