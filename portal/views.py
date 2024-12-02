@@ -31,6 +31,20 @@ from django.db.models import Avg
 
 @login_required
 def dashboard(request):
+    # Get the top 6 students sorted by total score in descending order
+    top_students = StudentOverallPerformance.objects.all().order_by('-total_score')[:6]
+
+    # Add school information to each student's performance
+    students_with_school = []
+    for performance in top_students:
+        student = performance.student
+        school = student.school  # Assuming the Student model has a foreign key to the School model
+        students_with_school.append({
+            'student': student,
+            'performance': performance,
+            'school': school
+        })
+
     """Main dashboard view for overview of KCSE performance"""
     # Total counts
     total_students = Student.objects.count()
@@ -53,6 +67,8 @@ def dashboard(request):
         top_counties = County.objects.annotate(
             avg_points=Avg('schools__students__overall_performances__total_points')
         ).order_by('-avg_points')[:5]
+
+        recent_activities = Activity.objects.order_by('-timestamp')[:5]
         
         context = {
             'total_students': total_students,
@@ -60,13 +76,17 @@ def dashboard(request):
             'total_counties': total_counties,
             'national_performance': national_performance,
             'top_counties': top_counties,
-            'latest_session': latest_session
+            'latest_session': latest_session,
+            'recent_activities': recent_activities,
+            'students_with_school':students_with_school
         }
     except ExaminationSession.DoesNotExist:
         context = {
+            'students_with_school':students_with_school,
             'total_students': total_students,
             'total_schools': total_schools,
             'total_counties': total_counties,
+            'recent_activities': Activity.objects.order_by('-timestamp')[:5],  # Ensure this is always available
         }
     
     return render(request, 'kcse_portal/dashboard.html', context)
@@ -904,14 +924,24 @@ def resource_search(request):
 @login_required
 def profile_detail(request):
     try:
-        # Attempt to get the profile for the logged-in user
-        profile = request.user.profile
+        # Get or create the user's profile
+        profile, created = Profile.objects.get_or_create(user=request.user)
     except Profile.DoesNotExist:
-        # If no profile exists, you can either create it or redirect the user
-        # For now, let's redirect the user to a page to create a profile
-        return redirect('create_profile')  # You can create a view to create a profile
-    
-    return render(request, 'registration/profile_detail.html', {'profile': profile})
+        profile = None
+
+    if request.method == 'POST':
+        form = ProfileForm(request.POST, request.FILES, instance=profile)
+        if form.is_valid():
+            form.save()  # Save the form with the new image
+            return redirect('profile_detail')
+    else:
+        form = ProfileForm(instance=profile)
+
+    return render(request, 'registration/profile_detail.html', {
+        'profile': profile,
+        'form': form,
+    })
+
 
 @login_required
 def create_profile(request):

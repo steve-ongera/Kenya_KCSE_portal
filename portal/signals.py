@@ -31,3 +31,56 @@ def update_student_overall_performance(sender, instance, **kwargs):
             'total_points': total_points
         }
     )
+
+
+from django.contrib.auth.signals import user_logged_in, user_logged_out
+from django.dispatch import receiver
+from .models import Activity
+
+@receiver(user_logged_in)
+def log_login(sender, request, user, **kwargs):
+    Activity.objects.create(
+        user=user,
+        action="Logged in",
+        ip_address=get_client_ip(request),
+    )
+
+@receiver(user_logged_out)
+def log_logout(sender, request, user, **kwargs):
+    Activity.objects.create(
+        user=user,
+        action="Logged out",
+        ip_address=get_client_ip(request),
+    )
+
+def get_client_ip(request):
+    """Helper function to get the client's IP address"""
+    x_forwarded_for = request.META.get('HTTP_X_FORWARDED_FOR')
+    if x_forwarded_for:
+        ip = x_forwarded_for.split(',')[0]
+    else:
+        ip = request.META.get('REMOTE_ADDR')
+    return ip
+
+from django.db.models.signals import post_save, post_delete
+from django.dispatch import receiver
+from .models import Profile, Activity
+
+@receiver(post_save, sender=Profile)
+def track_profile_save(sender, instance, created, **kwargs):
+    if created:
+        action = f"Created profile for {instance.full_names} (Role: {instance.role})"
+    else:
+        action = f"Updated profile for {instance.full_names} (Role: {instance.role})"
+    Activity.objects.create(
+        user=instance.user,
+        action=action
+    )
+
+@receiver(post_delete, sender=Profile)
+def track_profile_delete(sender, instance, **kwargs):
+    action = f"Deleted profile for {instance.full_names} (Role: {instance.role})"
+    Activity.objects.create(
+        user=instance.user,
+        action=action
+    )

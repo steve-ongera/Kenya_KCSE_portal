@@ -55,3 +55,9 @@ admin.site.register(Resource, ResourceAdmin)
 admin.site.register(ResourceCategory)
 
 admin.site.register(Profile)
+
+@admin.register(Activity)
+class ActivityAdmin(admin.ModelAdmin):
+    list_display = ('user', 'action', 'timestamp')
+    list_filter = ('user', 'timestamp')
+    search_fields = ('action',)

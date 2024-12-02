@@ -39,6 +39,10 @@ MIDDLEWARE = [
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
 ]
 
+MIDDLEWARE += [
+    'portal.middleware.LogRequestMiddleware',
+]
+
 ROOT_URLCONF = 'Kenya_KCSE_portal.urls'
 
 TEMPLATES = [

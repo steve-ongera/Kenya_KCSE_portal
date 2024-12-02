@@ -3,6 +3,7 @@ from django.db import models
 from django.core.validators import MinValueValidator, MaxValueValidator
 from django.urls import reverse
 from django.contrib.auth.models import User
+from django.utils.timezone import now
 
 
 class ExamCenter(models.Model):
@@ -254,3 +255,12 @@ class Profile(models.Model):
     def __str__(self):
         return self.full_names    
 
+
+class Activity(models.Model):
+    user = models.ForeignKey(User, on_delete=models.CASCADE, null=True, blank=True)  # User performing the action
+    action = models.CharField(max_length=255)  # The action performed
+    timestamp = models.DateTimeField(default=now)  # Time of the activity
+    ip_address = models.GenericIPAddressField(null=True, blank=True)  # Optional: Track user's IP address
+
+    def __str__(self):
+        return f"{self.user} - {self.action} at {self.timestamp}"
