@@ -244,8 +244,8 @@
                     <tr>
                       <th scope="col">Name</th>
                       <th scope="col">Average points</th>
-                      <th scope="col">Product</th>
-                      <th scope="col">Price</th>
+                      <th scope="col">school</th>
+                      <th scope="col">mean</th>
                       <th scope="col">Status</th>
                     </tr>
                   </thead>
@@ -253,9 +253,9 @@
                     {% for county in top_counties %}
                     <tr>
                       <th scope="row"><a href="#">{{ county.name }}</a></th>
-                      <td>{{ county.avg_points }}</td>
-                      <td><a href="#" class="text-primary">At praesentium minu</a></td>
-                      <td>$64</td>
+                      <td>{{ county.avg_points |floatformat:4  }}</td>
+                      <td><a href="#" class="text-primary">school</a></td>
+                      <td>78</td>
                       <td><span class="badge bg-success">Approved</span></td>
                     </tr>
 
