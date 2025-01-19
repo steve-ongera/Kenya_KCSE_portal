@@ -104,9 +104,15 @@ class Student(models.Model):
     gender = models.CharField(max_length=1, choices=GENDER_CHOICES)
     date_of_birth = models.DateField()
     school = models.ForeignKey(School, on_delete=models.CASCADE, related_name='students')
+    year = models.IntegerField(help_text="Examination year" , blank=True , null=True)  # New field
     
     def __str__(self):
         return f"{self.first_name} {self.last_name} ({self.index_number})"
+
+    class Meta:
+        indexes = [
+            models.Index(fields=['year']),  # Add index for better query performance
+        ]
 
 class Subject(models.Model):
     """Represents KCSE Subjects"""
