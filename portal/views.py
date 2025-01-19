@@ -26,25 +26,35 @@ from django.db.models.functions import ExtractYear
 
 @login_required
 def dashboard(request):
-    #gender distribution 
-    # Get gender distribution by examination year
-    gender_data = Student.objects.annotate(
-        year=ExtractYear('index_number__split("/")[-1]')  # Extract year from index number
-    ).values('year').annotate(
-        male=Count('id', filter=Q(gender='M')),
-        female=Count('id', filter=Q(gender='F'))
-    ).order_by('year')
-    
-    # Format data for ApexCharts
-    years = [entry['year'] for entry in gender_data]
-    male_counts = [entry['male'] for entry in gender_data]
-    female_counts = [entry['female'] for entry in gender_data]
-    
-    data = {
-        'years': years,
-        'male_counts': male_counts,
-        'female_counts': female_counts
+    # Fetch gender distribution by year
+    students = Student.objects.values('year', 'gender').annotate(count=Count('id')).order_by('year')
+
+    # Prepare the data for Chart.js
+    gender_data = {
+        'years': [],
+        'male_counts': [],
+        'female_counts': [],
+        'total_counts': {}  # Store the total count for each year
     }
+
+    # Populate the data
+    for student in students:
+        year = student['year']
+        gender = student['gender']
+        if gender == 'M':
+            gender_data['male_counts'].append(student['count'])
+        elif gender == 'F':
+            gender_data['female_counts'].append(student['count'])
+        
+        if year not in gender_data['years']:
+            gender_data['years'].append(year)
+
+        # Store total number of students for each year (male + female)
+        if year not in gender_data['total_counts']:
+            gender_data['total_counts'][year] = 0
+        
+        gender_data['total_counts'][year] += student['count']
+
     
     
     # Get the top 6 students sorted by total score in descending order
@@ -94,7 +104,11 @@ def dashboard(request):
             'top_counties': top_counties,
             'latest_session': latest_session,
             'recent_activities': recent_activities,
-            'students_with_school':students_with_school
+            'students_with_school':students_with_school,
+            'years': gender_data['years'],
+            'male_counts': gender_data['male_counts'],
+            'female_counts': gender_data['female_counts'],
+            'total_counts': gender_data['total_counts']
         }
     except ExaminationSession.DoesNotExist:
         context = {
@@ -103,7 +117,7 @@ def dashboard(request):
             'total_schools': total_schools,
             'total_counties': total_counties,
             'recent_activities': Activity.objects.order_by('-timestamp')[:5],  # Ensure this is always available
-            'data':data,
+            
         }
     
     return render(request, 'kcse_portal/dashboard.html', context)

@@ -1,6 +1,7 @@
 {% extends "base/base.html" %}
 {% load static %}
 {% block content %}
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 <div class="pagetitle">
     <h1>Dashboard</h1>
     <nav>
@@ -145,9 +146,9 @@
         <li class="dropdown-header text-start">
           <h6>Filter</h6>
         </li>
-        <li><a class="dropdown-item" href="#">All Years</a></li>
-        <li><a class="dropdown-item" href="#">Last 5 Years</a></li>
-        <li><a class="dropdown-item" href="#">Last 3 Years</a></li>
+        <li><a class="dropdown-item" href="#" onclick="filterData('all')">All Years</a></li>
+        <li><a class="dropdown-item" href="#" onclick="filterData('last5')">Last 5 Years</a></li>
+        <li><a class="dropdown-item" href="#" onclick="filterData('last3')">Last 3 Years</a></li>
       </ul>
     </div>
 
@@ -155,72 +156,57 @@
       <h5 class="card-title">Gender Distribution by Examination Year</h5>
 
       <!-- Line Chart -->
-      <div id="reportsChart"></div>
+      <canvas id="genderChart" width="400" height="200"></canvas>
 
-      <script>
-        document.addEventListener("DOMContentLoaded", () => {
-          // Fetch data from the backend
-          fetch('/get-gender-distribution/')  // Update this URL to match your URL configuration
-            .then(response => response.json())
-            .then(data => {
-              new ApexCharts(document.querySelector("#reportsChart"), {
-                series: [{
-                  name: 'Male Students',
-                  data: data.male_counts,
-                }, {
-                  name: 'Female Students',
-                  data: data.female_counts,
-                }],
-                chart: {
-                  height: 350,
-                  type: 'area',
-                  toolbar: {
-                    show: false
-                  },
+    <script>
+        // Ensure data is properly passed from the template to JavaScript
+        var years = {{ years|safe }};
+        var maleCounts = {{ male_counts|safe }};
+        var femaleCounts = {{ female_counts|safe }};
+
+        console.log("Years: ", years);  // Log to check if data is correctly passed
+        console.log("Male Counts: ", maleCounts);  // Log to check if data is correctly passed
+        console.log("Female Counts: ", femaleCounts);  // Log to check if data is correctly passed
+
+        var ctx = document.getElementById('genderChart').getContext('2d');
+        var genderChart = new Chart(ctx, {
+            type: 'line',
+            data: {
+                labels: years,  // Use the passed "years" as labels
+                datasets: [{
+                    label: 'Male',
+                    data: maleCounts,  // Use the passed "male_counts" data
+                    borderColor: 'blue',
+                    fill: false,
+                    tension: 0.1
                 },
-                markers: {
-                  size: 4
-                },
-                colors: ['#4154f1', '#ff4560'],  // Blue for male, Pink for female
-                fill: {
-                  type: "gradient",
-                  gradient: {
-                    shadeIntensity: 1,
-                    opacityFrom: 0.3,
-                    opacityTo: 0.4,
-                    stops: [0, 90, 100]
-                  }
-                },
-                dataLabels: {
-                  enabled: false
-                },
-                stroke: {
-                  curve: 'smooth',
-                  width: 2
-                },
-                xaxis: {
-                  categories: data.years,
-                  title: {
-                    text: 'Examination Year'
-                  }
-                },
-                yaxis: {
-                  title: {
-                    text: 'Number of Students'
-                  }
-                },
-                tooltip: {
-                  y: {
-                    formatter: function(value) {
-                      return value + " students"
+                {
+                    label: 'Female',
+                    data: femaleCounts,  // Use the passed "female_counts" data
+                    borderColor: 'red',
+                    fill: false,
+                    tension: 0.1
+                }]
+            },
+            options: {
+                responsive: true,
+                scales: {
+                    x: {
+                        title: {
+                            display: true,
+                            text: 'Year'
+                        }
+                    },
+                    y: {
+                        title: {
+                            display: true,
+                            text: 'Number of Students'
+                        }
                     }
-                  }
                 }
-              }).render();
-            })
-            .catch(error => console.error('Error fetching data:', error));
+            }
         });
-      </script>
+    </script>
       <!-- End Line Chart -->
 
     </div>
