@@ -15,22 +15,38 @@ import io
 from collections import defaultdict
 from django.urls import reverse
 
-from .models import (
-    County, School, Student, Subject, 
-    ExaminationSession, StudentMarks, 
-    StudentOverallPerformance
-)
-from .forms import (
-    StudentMarkEntryForm, 
-    StudentRegistrationForm, 
-    SchoolPerformanceFilterForm
-)
+from .models import *
+
 from .forms import *
 from .utils import compute_school_statistics
 from django.db.models import Avg
+##new changes in dashboard 
+from django.db.models import Count
+from django.db.models.functions import ExtractYear
 
 @login_required
 def dashboard(request):
+    #gender distribution 
+    # Get gender distribution by examination year
+    gender_data = Student.objects.annotate(
+        year=ExtractYear('index_number__split("/")[-1]')  # Extract year from index number
+    ).values('year').annotate(
+        male=Count('id', filter=Q(gender='M')),
+        female=Count('id', filter=Q(gender='F'))
+    ).order_by('year')
+    
+    # Format data for ApexCharts
+    years = [entry['year'] for entry in gender_data]
+    male_counts = [entry['male'] for entry in gender_data]
+    female_counts = [entry['female'] for entry in gender_data]
+    
+    data = {
+        'years': years,
+        'male_counts': male_counts,
+        'female_counts': female_counts
+    }
+    
+    
     # Get the top 6 students sorted by total score in descending order
     top_students = StudentOverallPerformance.objects.all().order_by('-total_score')[:14]
 
@@ -87,6 +103,7 @@ def dashboard(request):
             'total_schools': total_schools,
             'total_counties': total_counties,
             'recent_activities': Activity.objects.order_by('-timestamp')[:5],  # Ensure this is always available
+            'data':data,
         }
     
     return render(request, 'kcse_portal/dashboard.html', context)
